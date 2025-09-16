@@ -1,0 +1,94 @@
+ts,event,extra
+2025-09-16T17:02:08.9785463+00:00,SCENARIO_START,large_ordered_diff_ts
+2025-09-16T17:02:08.9790859+00:00,PARAMS,points=10000000;ts_span=3600;pc=10;series_mult=10
+2025-09-16T17:02:08.9798166+00:00,THREAD_0_START,1000000
+2025-09-16T17:02:08.9808901+00:00,THREAD_1_START,1000000
+2025-09-16T17:02:08.9812010+00:00,THREAD_2_START,1000000
+2025-09-16T17:02:08.9814189+00:00,THREAD_3_START,1000000
+2025-09-16T17:02:08.9816885+00:00,THREAD_4_START,1000000
+2025-09-16T17:02:08.9819324+00:00,THREAD_5_START,1000000
+2025-09-16T17:02:08.9821417+00:00,THREAD_6_START,1000000
+2025-09-16T17:02:08.9823379+00:00,THREAD_7_START,1000000
+2025-09-16T17:02:08.9824883+00:00,THREAD_8_START,1000000
+2025-09-16T17:02:08.9825849+00:00,THREAD_9_START,1000000
+2025-09-16T17:04:03.4357285+00:00,THREAD_9_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4357318+00:00,THREAD_1_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4361482+00:00,THREAD_2_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4368893+00:00,THREAD_5_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4387918+00:00,THREAD_3_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4393317+00:00,THREAD_8_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4390240+00:00,THREAD_6_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4399753+00:00,THREAD_0_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4402297+00:00,THREAD_7_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4406060+00:00,THREAD_4_ERROR,<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.28.0</center>
+</body>
+</html>
+
+2025-09-16T17:04:03.4413942+00:00,SCENARIO_END,FAILED

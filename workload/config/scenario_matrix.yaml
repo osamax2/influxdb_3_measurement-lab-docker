@@ -1,0 +1,63 @@
+# Baselines
+baseline_ubuntu_only:
+  points: 0
+
+no_load_influx_idle:
+  points: 0
+
+# Load Scenarios
+small_ordered_same_ts:
+  points: 10000
+  timestamp_span_sec: 0
+  parallel_clients: 1
+  series_multiplier: 1
+  duration_sec: 10
+
+small_ordered_diff_ts:
+  points: 10000
+  timestamp_span_sec: 10
+  parallel_clients: 1
+  series_multiplier: 1
+  duration_sec: 10
+
+large_ordered_same_ts:
+  points: 10000000
+  timestamp_span_sec: 0
+  parallel_clients: 1
+  series_multiplier: 10
+  duration_sec: 10
+
+large_ordered_diff_ts:
+  points: 10000000
+  timestamp_span_sec: 3600
+  parallel_clients: 1
+  series_multiplier: 10
+  duration_sec: 10
+
+small_simul_same_ts:
+  points: 10000
+  timestamp_span_sec: 0
+  parallel_clients: 8
+  series_multiplier: 1
+  duration_sec: 10
+
+small_simul_diff_ts:
+  points: 10000
+  timestamp_span_sec: 10
+  parallel_clients: 8
+  series_multiplier: 1
+  duration_sec: 10
+
+large_simul_same_ts:
+  points: 10000000
+  timestamp_span_sec: 0
+  parallel_clients: 16
+  series_multiplier: 10
+  duration_sec: 10
+
+large_simul_diff_ts:
+  points: 10000000
+  timestamp_span_sec: 3600
+  parallel_clients: 16
+  series_multiplier: 10
+  duration_sec: 10
