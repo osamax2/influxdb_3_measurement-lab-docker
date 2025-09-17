@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   influxdb:
     build: ./influxdb
@@ -12,14 +11,15 @@ services:
     environment:
       INFLUXDB_3_ADMIN_TOKEN: "${INFLUXDB_3_ADMIN_TOKEN}"
       INFLUXDB_ORG: "${INFLUX_ORG}"
-      INFLUXDB_BUCKET: "${INFLUXDB_BUCKET}"
-      RUST_LOG: "influxdb3_server=trace,hyper=trace,tower_http=trace"
+      INFLUXDB_BUCKET: "${INFLUX_BUCKET}"
+      INFLUX_TOKEN: "${INFLUX_TOKEN}"
+      RUST_LOG: "influxdb3_server=info"
+      # For short-term testing only: disable auth so workload can write without a token.
+      INFLUX_DISABLE_AUTH: "1"
     volumes:
       - influxdb-data:/var/lib/influxdb
       - ./run:/run
     healthcheck:
-      # Normalize line endings at probe time and run the healthcheck via sh so
-      # CRLF issues won't cause `/usr/local/bin/healthcheck.sh: not found`.
       test: ["CMD-SHELL", "sh -c \"sed -i 's/\\r$//' /usr/local/bin/healthcheck.sh || true; sh /usr/local/bin/healthcheck.sh | grep -q '^[12][0-9][0-9]'\""]
       interval: 15s
       timeout: 3s

@@ -1,13 +1,13 @@
-[12:22:41 INF] START 2025-09-17T12:22:41.2934296Z
+[16:24:11 INF] START 2025-09-17T16:24:11.5181078Z
 [ENV] APP_UID=1654
 [ENV] ASPNETCORE_HTTP_PORTS=8080
 [ENV] BATCH_SIZE=5000
 [ENV] DOTNET_RUNNING_IN_CONTAINER=true
 [ENV] DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-[ENV] DOTNET_VERSION=8.0.20
+[ENV] DOTNET_VERSION=8.0.18
 [ENV] DURATION_SEC=10
 [ENV] HOME=/home/worker
-[ENV] HOSTNAME=db966a8366bf
+[ENV] HOSTNAME=9f69d3cd3ccf
 [ENV] INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
 [ENV] INFLUXDB_ADMIN_PASSWORD=changeme
 [ENV] INFLUXDB_ADMIN_USER=admin
@@ -37,54 +37,33 @@
 [RunLogger] Writing header
 [RunLogger] Header written and flushed
 [RunLogger] Log file stream opened: System.IO.FileStream
-[RunLogger] Event: 2025-09-17T12:22:41.6625274+00:00,SCENARIO_START,small_ordered_same_ts
+[RunLogger] Event: 2025-09-17T16:24:11.5837054+00:00,SCENARIO_START,small_ordered_same_ts
 [RunLogger] Flushed event: SCENARIO_START
-[RunLogger] Event: 2025-09-17T12:22:41.6649983+00:00,PARAMS,points=10000;ts_span=0;pc=1;series_mult=1
+[RunLogger] Event: 2025-09-17T16:24:11.5841140+00:00,PARAMS,points=10000;ts_span=0;pc=1;series_mult=1
 [RunLogger] Flushed event: PARAMS
 [CONFIG] Total Points: 10000
 [CONFIG] Parallel Clients: 1
 [CONFIG] Batch Size: 5000
-[RunLogger] Event: 2025-09-17T12:22:41.6698419+00:00,THREAD_0_START,10000
+[RunLogger] Event: 2025-09-17T16:24:11.5847553+00:00,THREAD_0_START,10000
 [RunLogger] Flushed event: THREAD_0_START
 [THREAD 0] Processing 10000 points
 [PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=10000, seriesMultiplier=1
 [PointGenerator] Generating series s0 with 10000 points
-[GenSeries] Generating point 0: ts=2025-09-17T12:22:41.6674482+00:00, ns=1758111761667000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=17.36898617859658 1758111761667000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=17.36898617859658 1758111761667000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=17.36898617859658 1758111761667000000
-[GenSeries] Generating point 1: ts=2025-09-17T12:22:41.6674482+00:00, ns=1758111761667000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=62.39484399592968 1758111761667000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=62.39484399592968 1758111761667000000
-[GenSeries] Generating point 2: ts=2025-09-17T12:22:41.6674482+00:00, ns=1758111761667000000
-[12:22:41 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.UnauthorizedException
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[12:22:42 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.UnauthorizedException
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[12:22:42 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.UnauthorizedException
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[12:22:42 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.UnauthorizedException
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Event: 2025-09-17T12:22:42.5732685+00:00,THREAD_0_ERROR,
-[RunLogger] Flushed event: THREAD_0_ERROR
-[THREAD 0] Failed: 
-[RunLogger] Event: 2025-09-17T12:22:42.5785817+00:00,SCENARIO_END,FAILED
+[GenSeries] Generating point 0: ts=2025-09-17T16:24:11.5846377+00:00, ns=1758126251584000000
+[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=46.16893059768521 1758126251584000000
+[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=46.16893059768521 1758126251584000000
+[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=46.16893059768521 1758126251584000000
+[GenSeries] Generating point 1: ts=2025-09-17T16:24:11.5846377+00:00, ns=1758126251584000000
+[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=47.232257305945716 1758126251584000000
+[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=47.232257305945716 1758126251584000000
+[GenSeries] Generating point 2: ts=2025-09-17T16:24:11.5846377+00:00, ns=1758126251584000000
+[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=92.91641075197624 1758126251584000000
+[PointGenerator] Series s0 yielded 30000 lines
+[RunLogger] Event: 2025-09-17T16:24:17.5794966+00:00,THREAD_0_END,SUCCESS
+[RunLogger] Flushed event: THREAD_0_END
+[THREAD 0] Completed successfully
+[RunLogger] Event: 2025-09-17T16:24:17.5816000+00:00,SCENARIO_END,SUCCESS
 [RunLogger] Flushed event: SCENARIO_END
 Waiting 10 seconds before exiting...
 [RunLogger] Disposing logger and flushing file
-[12:22:52 INF] END 2025-09-17T12:22:52.5826275Z
+[16:24:27 INF] END 2025-09-17T16:24:27.5870442Z
