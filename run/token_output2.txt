@@ -1,0 +1,5 @@
+error: unexpected argument '--server' found
+
+Usage: influxdb3 create token --admin [OPTIONS]
+
+For more information, try '--help'.

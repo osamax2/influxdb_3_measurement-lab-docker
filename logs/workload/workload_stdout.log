@@ -1,14 +1,14 @@
-[22:24:14 INF] START 2025-09-16T22:24:14.7171618Z
+[12:22:41 INF] START 2025-09-17T12:22:41.2934296Z
 [ENV] APP_UID=1654
 [ENV] ASPNETCORE_HTTP_PORTS=8080
 [ENV] BATCH_SIZE=5000
 [ENV] DOTNET_RUNNING_IN_CONTAINER=true
 [ENV] DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-[ENV] DOTNET_VERSION=8.0.18
-[ENV] DURATION_SEC=3600
+[ENV] DOTNET_VERSION=8.0.20
+[ENV] DURATION_SEC=10
 [ENV] HOME=/home/worker
-[ENV] HOSTNAME=9a636348c6b0
-[ENV] INFLUXDB_3_ADMIN_TOKEN=admin-token
+[ENV] HOSTNAME=db966a8366bf
+[ENV] INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
 [ENV] INFLUXDB_ADMIN_PASSWORD=changeme
 [ENV] INFLUXDB_ADMIN_USER=admin
 [ENV] INFLUXDB_BUCKET=my-bucket
@@ -16,844 +16,75 @@
 [ENV] INFLUXDB_ORG=my-org
 [ENV] INFLUXDB_RETENTION=0
 [ENV] INFLUX_BASE_IMAGE=influxdb:3-core
-[ENV] INFLUX_HOST=proxy
+[ENV] INFLUX_HOST=influxdb
 [ENV] INFLUX_ORG=my-org
-[ENV] INFLUX_PORT=8182
-[ENV] INFLUX_TOKEN=apiv3_xp0-2jegswmf3plsfr71FudYytlqLgRDwNm7f_MSsrsIpQBctxUrQ1uflxL5WvO1Hm1UhQ2yNhPcEAU3mRLpZQ
+[ENV] INFLUX_PORT=8086
+[ENV] INFLUX_TOKEN=apiv3_testtoken123
 [ENV] MEASUREMENTS=cpu_temp,pressure,humidity
-[ENV] PARALLEL_CLIENTS=10
+[ENV] PARALLEL_CLIENTS=1
 [ENV] PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-[ENV] POINTS=10000000
+[ENV] POINTS=10000
 [ENV] PWD=/app
 [ENV] REPORT_NAME=run
-[ENV] SCENARIO=large_ordered_diff_ts
+[ENV] SCENARIO=small_ordered_same_ts
 [ENV] SCENARIO_MATRIX_PATH=/app/config/scenario_matrix.yaml
-[ENV] SERIES_MULTIPLIER=10
+[ENV] SERIES_MULTIPLIER=1
 [ENV] SHLVL=0
 [ENV] TAGS=site=lab,host=testnode
-[ENV] TIMESTAMP_SPAN_SEC=3600
+[ENV] TIMESTAMP_SPAN_SEC=0
 [ENV] WORKLOAD_LOG_DIR=/logs/workload
 [RunLogger] Creating log file: /logs/workload/run.csv
 [RunLogger] Writing header
 [RunLogger] Header written and flushed
 [RunLogger] Log file stream opened: System.IO.FileStream
-[RunLogger] Event: 2025-09-16T22:24:14.8707259+00:00,SCENARIO_START,large_ordered_diff_ts
+[RunLogger] Event: 2025-09-17T12:22:41.6625274+00:00,SCENARIO_START,small_ordered_same_ts
 [RunLogger] Flushed event: SCENARIO_START
-[RunLogger] Event: 2025-09-16T22:24:14.8711766+00:00,PARAMS,points=10000000;ts_span=3600;pc=10;series_mult=10
+[RunLogger] Event: 2025-09-17T12:22:41.6649983+00:00,PARAMS,points=10000;ts_span=0;pc=1;series_mult=1
 [RunLogger] Flushed event: PARAMS
-[CONFIG] Total Points: 10000000
-[CONFIG] Parallel Clients: 10
+[CONFIG] Total Points: 10000
+[CONFIG] Parallel Clients: 1
 [CONFIG] Batch Size: 5000
-[RunLogger] Event: 2025-09-16T22:24:14.8719285+00:00,THREAD_0_START,1000000
+[RunLogger] Event: 2025-09-17T12:22:41.6698419+00:00,THREAD_0_START,10000
 [RunLogger] Flushed event: THREAD_0_START
-[THREAD 0] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8731511+00:00,THREAD_1_START,1000000
-[RunLogger] Flushed event: THREAD_1_START
-[THREAD 1] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8734587+00:00,THREAD_2_START,1000000
-[RunLogger] Flushed event: THREAD_2_START
-[THREAD 2] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8736743+00:00,THREAD_3_START,1000000
-[RunLogger] Flushed event: THREAD_3_START
-[THREAD 3] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8739145+00:00,THREAD_4_START,1000000
-[RunLogger] Flushed event: THREAD_4_START
-[THREAD 4] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8741370+00:00,THREAD_5_START,1000000
-[RunLogger] Flushed event: THREAD_5_START
-[THREAD 5] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8743456+00:00,THREAD_6_START,1000000
-[RunLogger] Flushed event: THREAD_6_START
-[THREAD 6] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8746973+00:00,THREAD_7_START,1000000
-[RunLogger] Flushed event: THREAD_7_START
-[THREAD 7] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8749676+00:00,THREAD_8_START,1000000
-[RunLogger] Flushed event: THREAD_8_START
-[THREAD 8] Processing 1000000 points
-[RunLogger] Event: 2025-09-16T22:24:14.8750816+00:00,THREAD_9_START,1000000
-[RunLogger] Flushed event: THREAD_9_START
-[THREAD 9] Processing 1000000 points
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=66.5866202437706 1758061454871000000
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=83.07563594634888 1758061454871000000
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=12.629127845974807 1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=28.948082408346686 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=83.07563594634888 1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=50.352188378734986 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=12.629127845974807 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=28.948082408346686 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=83.07563594634888 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=12.629127845974807 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=28.948082408346686 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=16.580677969431157 1758061455871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=42.40624982854682 1758061455871000000
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=97.69739486740006 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=16.580677969431157 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=42.40624982854682 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=97.69739486740006 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=97.69739486740006 1758061454871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=7.956951807019285 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=7.956951807019285 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=95.54949731512392 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=95.54949731512392 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=64.15741151911637 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=64.15741151911637 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=64.15741151911637 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=91.29745393991053 1758061455871000000
-[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=1000000, seriesMultiplier=10
-[PointGenerator] Generating series s0 with 1000000 points
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=11.064439744041788 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=11.064439744041788 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=11.064439744041788 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=75.67749410159358 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=75.67749410159358 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=91.29745393991053 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=28.272993934690593 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=50.352188378734986 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=50.352188378734986 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=3.7750768911545385 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=3.7750768911545385 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=28.272993934690593 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=28.272993934690593 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=10.448287233704512 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=10.448287233704512 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=66.5866202437706 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=66.5866202437706 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=63.908636936791495 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[GenSeries] Generating point 0: ts=2025-09-16T22:24:14.8717752+00:00, ns=1758061454871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=44.18433618279541 1758061454871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=44.18433618279541 1758061454871000000
-[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=44.18433618279541 1758061454871000000
-[GenSeries] Generating point 1: ts=2025-09-16T22:24:15.8717752+00:00, ns=1758061455871000000
-[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=95.70837512567722 1758061455871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=95.70837512567722 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=63.908636936791495 1758061455871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[GenSeries] Generating point 2: ts=2025-09-16T22:24:16.8717752+00:00, ns=1758061456871000000
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
+[THREAD 0] Processing 10000 points
+[PointGenerator] Generate called: measurements=[cpu_temp,pressure,humidity], count=10000, seriesMultiplier=1
+[PointGenerator] Generating series s0 with 10000 points
+[GenSeries] Generating point 0: ts=2025-09-17T12:22:41.6674482+00:00, ns=1758111761667000000
+[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=17.36898617859658 1758111761667000000
+[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=17.36898617859658 1758111761667000000
+[PointGenerator] Yielded line: humidity,site=lab,host=testnode,series=s0 value=17.36898617859658 1758111761667000000
+[GenSeries] Generating point 1: ts=2025-09-17T12:22:41.6674482+00:00, ns=1758111761667000000
+[PointGenerator] Yielded line: cpu_temp,site=lab,host=testnode,series=s0 value=62.39484399592968 1758111761667000000
+[PointGenerator] Yielded line: pressure,site=lab,host=testnode,series=s0 value=62.39484399592968 1758111761667000000
+[GenSeries] Generating point 2: ts=2025-09-17T12:22:41.6674482+00:00, ns=1758111761667000000
+[12:22:41 WRN] Write attempt 1 failed via SDK
+InfluxDB.Client.Core.Exceptions.UnauthorizedException
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
+[12:22:42 WRN] Write attempt 2 failed via SDK
+InfluxDB.Client.Core.Exceptions.UnauthorizedException
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
+[12:22:42 WRN] Write attempt 3 failed via SDK
+InfluxDB.Client.Core.Exceptions.UnauthorizedException
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 1 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 2 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
+[12:22:42 ERR] Exception in WritePointsAsync
+InfluxDB.Client.Core.Exceptions.UnauthorizedException
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
    at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
    at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
    at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[RunLogger] Event: 2025-09-16T22:24:15.7318198+00:00,THREAD_0_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
+[RunLogger] Event: 2025-09-17T12:22:42.5732685+00:00,THREAD_0_ERROR,
 [RunLogger] Flushed event: THREAD_0_ERROR
-[THREAD 0] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Event: 2025-09-16T22:24:15.7342908+00:00,THREAD_1_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[RunLogger] Flushed event: THREAD_1_ERROR
-[THREAD 1] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[RunLogger] Event: 2025-09-16T22:24:15.7349160+00:00,THREAD_9_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Flushed event: THREAD_9_ERROR
-[THREAD 9] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[RunLogger] Event: 2025-09-16T22:24:15.7370634+00:00,THREAD_7_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Flushed event: THREAD_7_ERROR
-[THREAD 7] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[RunLogger] Event: 2025-09-16T22:24:15.7384803+00:00,THREAD_6_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[RunLogger] Flushed event: THREAD_6_ERROR
-[THREAD 6] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 WRN] Write attempt 3 failed via SDK
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Event: 2025-09-16T22:24:15.7397068+00:00,THREAD_8_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Flushed event: THREAD_8_ERROR
-[RunLogger] Event: 2025-09-16T22:24:15.7404123+00:00,THREAD_5_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[THREAD 8] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[RunLogger] Flushed event: THREAD_5_ERROR
-[THREAD 5] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Event: 2025-09-16T22:24:15.7399855+00:00,THREAD_2_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[22:24:15 ERR] Exception in WritePointsAsync
-InfluxDB.Client.Core.Exceptions.BadGatewayException: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithIRestResponse(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at InfluxDB.Client.Api.Service.WriteService.PostWriteAsyncWithHttpInfo(String org, String bucket, Byte[] body, String zapTraceSpan, String contentEncoding, String contentType, Nullable`1 contentLength, String accept, String orgID, Nullable`1 precision, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 96
-   at Workload.InfluxWriter.FlushAsync(List`1 batch) in /src/src/InfluxWriter.cs:line 108
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 70
-   at Workload.InfluxWriter.WritePointsAsync(IAsyncEnumerable`1 lines) in /src/src/InfluxWriter.cs:line 65
-[RunLogger] Flushed event: THREAD_2_ERROR
-[RunLogger] Event: 2025-09-16T22:24:15.7412523+00:00,THREAD_4_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[THREAD 2] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[RunLogger] Flushed event: THREAD_4_ERROR
-[THREAD 4] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[RunLogger] Event: 2025-09-16T22:24:15.7409930+00:00,THREAD_3_ERROR,<html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[RunLogger] Flushed event: THREAD_3_ERROR
-[THREAD 3] Failed: <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-<hr><center>nginx/1.28.0</center>
-</body>
-</html>
-
-[RunLogger] Event: 2025-09-16T22:24:15.7420586+00:00,SCENARIO_END,FAILED
+[THREAD 0] Failed: 
+[RunLogger] Event: 2025-09-17T12:22:42.5785817+00:00,SCENARIO_END,FAILED
 [RunLogger] Flushed event: SCENARIO_END
-Waiting 3600 seconds before exiting...
+Waiting 10 seconds before exiting...
+[RunLogger] Disposing logger and flushing file
+[12:22:52 INF] END 2025-09-17T12:22:52.5826275Z

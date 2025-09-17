@@ -15,6 +15,9 @@ FROM mcr.microsoft.com/dotnet/runtime:8.0
 WORKDIR /app
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
+# Install curl for health probes (small, commonly available)
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/*
+
 # Create config directory
 RUN mkdir -p /app/config
 

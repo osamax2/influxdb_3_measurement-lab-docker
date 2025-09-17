@@ -1,0 +1,1 @@
+Failed to create token, error: ApiError { code: 404, message: "not found" }

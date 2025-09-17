@@ -1,0 +1,4 @@
+TRYING
+Are you sure you want to regenerate admin token? Enter 'yes' to confirm
+Failed to create token, error: "Cannot regenerate token without confirmation"
+DONE

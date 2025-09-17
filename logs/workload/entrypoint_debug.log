@@ -1,41 +1,45 @@
-[entrypoint.sh] Starting Workload container at Tue Sep 16 22:24:14 UTC 2025
--rw-r--r-- 1 worker worker 33280 Sep 16 16:23 /app/Workload.dll
-[entrypoint.sh] Valid DURATION_SEC: 3600
+[entrypoint.sh] Starting Workload container at Wed Sep 17 12:22:26 UTC 2025
+-rw-r--r-- 1 worker worker 33280 Sep 17 11:10 /app/Workload.dll
+[entrypoint.sh] Valid DURATION_SEC: 10
 [entrypoint.sh] Valid BATCH_SIZE: 5000
-[entrypoint.sh] Valid INFLUX_PORT: 8182
-[entrypoint.sh] Valid POINTS: 10000000
-[entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 3600
-[entrypoint.sh] Valid PARALLEL_CLIENTS: 10
-[entrypoint.sh] Valid SERIES_MULTIPLIER: 10
+[entrypoint.sh] Valid INFLUX_PORT: 8086
+[entrypoint.sh] Valid POINTS: 10000
+[entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 0
+[entrypoint.sh] Valid PARALLEL_CLIENTS: 1
+[entrypoint.sh] Valid SERIES_MULTIPLIER: 1
 [entrypoint.sh] ENV VARS:
 TAGS=site=lab,host=testnode
-POINTS=10000000
+POINTS=10000
 INFLUXDB_ORG=my-org
 INFLUXDB_ADMIN_PASSWORD=changeme
 INFLUXDB_BUCKET=my-bucket
 INFLUXDB_HTTP_BIND_ADDRESS=:8086
-SCENARIO=large_ordered_diff_ts
+SCENARIO=small_ordered_same_ts
 MEASUREMENTS=cpu_temp,pressure,humidity
-TIMESTAMP_SPAN_SEC=3600
+TIMESTAMP_SPAN_SEC=0
 REPORT_NAME=run
-INFLUX_PORT=8182
+INFLUX_PORT=8086
 INFLUX_BASE_IMAGE=influxdb:3-core
 WORKLOAD_LOG_DIR=/logs/workload
 SCENARIO_MATRIX_PATH=/app/config/scenario_matrix.yaml
 INFLUX_ORG=my-org
 INFLUXDB_ADMIN_USER=admin
 INFLUXDB_RETENTION=0
-INFLUX_TOKEN=apiv3_xp0-2jegswmf3plsfr71FudYytlqLgRDwNm7f_MSsrsIpQBctxUrQ1uflxL5WvO1Hm1UhQ2yNhPcEAU3mRLpZQ
-PARALLEL_CLIENTS=10
-INFLUXDB_3_ADMIN_TOKEN=admin-token
-SERIES_MULTIPLIER=10
+INFLUX_TOKEN=apiv3_testtoken123
+PARALLEL_CLIENTS=1
+INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
+SERIES_MULTIPLIER=1
 BATCH_SIZE=5000
-DURATION_SEC=3600
-INFLUX_HOST=proxy
+DURATION_SEC=10
+INFLUX_HOST=influxdb
+[entrypoint.sh] Waiting for InfluxDB at http://influxdb:8086/health (up to 60 s)
+[entrypoint.sh] InfluxDB health responded: 401
+[entrypoint.sh] Waiting for TCP influxdb:8086 (up to 60 s)
+[entrypoint.sh] TCP influxdb:8086 is reachable
 [entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
 [entrypoint.sh] Listing /logs/workload before workload execution:
-total 96
--rw-r--r-- 1 worker worker  1293 Sep 16 22:24 entrypoint_debug.log
--rw-r--r-- 1 worker worker 25863 Sep 16 22:18 environment_variables.log
--rw-r--r-- 1 worker worker  2871 Sep 16 22:18 run.csv
--rw-r--r-- 1 worker worker 58487 Sep 16 22:18 workload_stdout.log
+total 76
+-rwxrwxrwx 1 root root  1443 Sep 17 12:22 entrypoint_debug.log
+-rwxrwxrwx 1 root root 58785 Sep 17 12:21 environment_variables.log
+-rwxrwxrwx 1 root root   328 Sep 17 12:21 run.csv
+-rwxrwxrwx 1 root root  6654 Sep 17 12:22 workload_stdout.log

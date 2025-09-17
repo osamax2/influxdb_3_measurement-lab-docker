@@ -1,7 +1,8 @@
+version: '3.8'
+
 services:
   influxdb:
     build: ./influxdb
-    # image intentionally omitted to force local build
     user: root
     ports:
       - "8086:8086"
@@ -10,34 +11,30 @@ services:
       - .env
     environment:
       INFLUXDB_3_ADMIN_TOKEN: "${INFLUXDB_3_ADMIN_TOKEN}"
-      INFLUXDB_ORG: "${INFLUXDB_ORG}"
+      INFLUXDB_ORG: "${INFLUX_ORG}"
       INFLUXDB_BUCKET: "${INFLUXDB_BUCKET}"
       RUST_LOG: "influxdb3_server=trace,hyper=trace,tower_http=trace"
     volumes:
       - influxdb-data:/var/lib/influxdb
+      - ./run:/run
     healthcheck:
-      # Prefer using INFLUX_TOKEN (the runtime apiv3 secret) if available.
-      # Use a small container-local helper script which reads a runtime token file (/run/influx_token)
-      # written by the init script. To avoid aggressive MissingToken log noise during startup,
-      # give the container a longer start_period and less frequent probes.
-      test: ["CMD-SHELL", "/usr/local/bin/healthcheck.sh | grep -q \"^[12][0-9][0-9]\""]
+      # Normalize line endings at probe time and run the healthcheck via sh so
+      # CRLF issues won't cause `/usr/local/bin/healthcheck.sh: not found`.
+      test: ["CMD-SHELL", "sh -c \"sed -i 's/\\r$//' /usr/local/bin/healthcheck.sh || true; sh /usr/local/bin/healthcheck.sh | grep -q '^[12][0-9][0-9]'\""]
       interval: 15s
       timeout: 3s
       retries: 5
-      start_period: 60s
 
   workload:
-    build:
-      context: ./workload
-      dockerfile: Dockerfile
+    build: ./workload
     container_name: workload
     depends_on:
       - influxdb
     env_file:
       - .env
     environment:
-      INFLUX_HOST: proxy
-      INFLUX_PORT: 8182
+      INFLUX_HOST: influxdb
+      INFLUX_PORT: 8086
       INFLUX_ORG: ${INFLUX_ORG}
       INFLUX_TOKEN: ${INFLUX_TOKEN}
       SCENARIO: ${SCENARIO}
@@ -52,26 +49,12 @@ services:
       REPORT_NAME: ${REPORT_NAME}
       WORKLOAD_LOG_DIR: ${WORKLOAD_LOG_DIR:-/logs/workload}
       SCENARIO_MATRIX_PATH: /app/config/scenario_matrix.yaml
-      # Ensure local traffic to the influxdb service bypasses proxies
-      NO_PROXY: "localhost,127.0.0.1,influxdb"
-      HTTP_PROXY: ""
-      HTTPS_PROXY: ""
     volumes:
-      - ./logs/workload:${WORKLOAD_LOG_DIR:-/logs/workload}
+      - ./logs/workload:/logs/workload
       - ./workload/config/scenario_matrix.yaml:/app/config/scenario_matrix.yaml:ro
+      - ./run:/run
     command: ["/entrypoint.sh"]
-
-  proxy:
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    ports:
-      - "8182:8182"
-    depends_on:
-      - influxdb
-    volumes:
-      - ./logs/proxy:/var/log/nginx
-    container_name: influx-proxy
 
 volumes:
   influxdb-data: {}
+
