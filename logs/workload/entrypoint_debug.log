@@ -1,4 +1,4 @@
-[entrypoint.sh] Starting Workload container at Thu Sep 18 13:40:13 UTC 2025
+[entrypoint.sh] Starting Workload container at Fri Sep 19 10:38:22 UTC 2025
 -rw-r--r-- 1 worker worker 39424 Sep 18 13:25 /app/Workload.dll
 [entrypoint.sh] Valid DURATION_SEC: 10
 [entrypoint.sh] Valid BATCH_SIZE: 200000
@@ -40,8 +40,8 @@ INFLUX_HOST=influxdb
 [entrypoint.sh] TCP influxdb:8086 is reachable
 [entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
 [entrypoint.sh] Listing /logs/workload before workload execution:
-total 140
--rw-r--r-- 1 worker worker   1532 Sep 18 13:40 entrypoint_debug.log
--rw-r--r-- 1 worker worker 103961 Sep 18 13:33 environment_variables.log
--rw-r--r-- 1 worker worker    613 Sep 18 13:34 run.csv
--rw-r--r-- 1 worker worker   3610 Sep 18 13:34 workload_stdout.log
+total 160
+-rw-r--r-- 1 worker worker   1532 Sep 19 10:38 entrypoint_debug.log
+-rw-r--r-- 1 worker worker 105969 Sep 19 09:51 environment_variables.log
+-rw-r--r-- 1 worker worker   1057 Sep 19 09:51 run.csv
+-rw-r--r-- 1 worker worker  24569 Sep 19 09:52 workload_stdout.log

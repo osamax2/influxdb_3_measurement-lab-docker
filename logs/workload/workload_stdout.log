@@ -1,4 +1,4 @@
-[13:40:15 INF] START 2025-09-18T13:40:15.2688848Z
+[10:38:24 INF] START 2025-09-19T10:38:24.5556378Z
 [ENV] APP_UID=1654
 [ENV] ASPNETCORE_HTTP_PORTS=8080
 [ENV] BATCH_SIZE=200000
@@ -9,7 +9,7 @@
 [ENV] DURATION_SEC=10
 [ENV] FLUSH_INTERVAL_MS=5000
 [ENV] HOME=/home/worker
-[ENV] HOSTNAME=d88fbc0607bb
+[ENV] HOSTNAME=4c77b628eef1
 [ENV] INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
 [ENV] INFLUXDB_ADMIN_PASSWORD=changeme
 [ENV] INFLUXDB_ADMIN_USER=admin
@@ -42,76 +42,86 @@
 [RunLogger] Writing header
 [RunLogger] Header written and flushed
 [RunLogger] Log file stream opened: System.IO.FileStream
-[RunLogger] Event: 2025-09-18T13:40:15.3377711+00:00,SCENARIO_START,large_simul_same_ts
+[RunLogger] Event: 2025-09-19T10:38:24.6420308+00:00,SCENARIO_START,large_simul_same_ts
 [RunLogger] Flushed event: SCENARIO_START
-[RunLogger] Event: 2025-09-18T13:40:15.3381963+00:00,PARAMS,points=2000000;ts_span=0;pc=8;series_mult=2
+[RunLogger] Event: 2025-09-19T10:38:24.6423672+00:00,PARAMS,points=2000000;ts_span=0;pc=8;series_mult=2
 [RunLogger] Flushed event: PARAMS
 [CONFIG] Total Points: 2000000
 [CONFIG] Parallel Clients: 8
 [CONFIG] Batch Size: 200000
-[RunLogger] Event: 2025-09-18T13:40:15.3388901+00:00,THREAD_0_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6429211+00:00,THREAD_0_START,250000
 [RunLogger] Flushed event: THREAD_0_START
 [THREAD 0] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3399073+00:00,THREAD_1_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6440556+00:00,THREAD_1_START,250000
 [RunLogger] Flushed event: THREAD_1_START
 [THREAD 1] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3400764+00:00,THREAD_2_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6442883+00:00,THREAD_2_START,250000
 [RunLogger] Flushed event: THREAD_2_START
 [THREAD 2] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3402402+00:00,THREAD_3_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6444212+00:00,THREAD_3_START,250000
 [RunLogger] Flushed event: THREAD_3_START
 [THREAD 3] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3403812+00:00,THREAD_4_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6445700+00:00,THREAD_4_START,250000
 [RunLogger] Flushed event: THREAD_4_START
 [THREAD 4] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3405300+00:00,THREAD_5_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6448117+00:00,THREAD_5_START,250000
 [RunLogger] Flushed event: THREAD_5_START
 [THREAD 5] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3407018+00:00,THREAD_6_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6449871+00:00,THREAD_6_START,250000
 [RunLogger] Flushed event: THREAD_6_START
 [THREAD 6] Processing 250000 points
-[RunLogger] Event: 2025-09-18T13:40:15.3408574+00:00,THREAD_7_START,250000
+[RunLogger] Event: 2025-09-19T10:38:24.6451241+00:00,THREAD_7_START,250000
 [RunLogger] Flushed event: THREAD_7_START
 [THREAD 7] Processing 250000 points
-[13:40:18 DBG] Posting chunk bytes=7999941 (points=102695)
-[13:40:19 DBG] Posting chunk bytes=7999980 (points=102695)
-[13:40:21 DBG] Posting chunk bytes=7999992 (points=102693)
-[13:40:23 INF] Successfully wrote 102695 points (Total: 825641) in chunk (bytes=7999980)
-[13:40:24 INF] Successfully wrote 102695 points (Total: 786433) in chunk (bytes=7999941)
-[13:40:24 DBG] Posting chunk bytes=7999986 (points=102694)
-[13:40:24 DBG] Posting chunk bytes=7999965 (points=102694)
-[13:40:24 DBG] Posting chunk bytes=7999944 (points=102696)
-[13:40:24 INF] Successfully wrote 102693 points (Total: 960657) in chunk (bytes=7999992)
-[13:40:24 DBG] Posting chunk bytes=7999941 (points=102696)
-[13:40:25 DBG] Posting chunk bytes=7999941 (points=102696)
-[13:40:25 DBG] Posting chunk bytes=7999956 (points=102695)
-[13:40:25 DBG] Posting chunk bytes=7999959 (points=102689)
-[13:40:25 DBG] Posting chunk bytes=7999965 (points=102694)
-[RunLogger] Event: 2025-09-18T13:40:25.6586553+00:00,THREAD_7_END,SUCCESS
+[10:38:25 DBG] Posting chunk bytes=7999974 (points=102695)
+[10:38:26 DBG] Posting chunk bytes=7999977 (points=102697)
+[10:38:28 DBG] Posting chunk bytes=7999983 (points=102699)
+[10:38:28 DBG] Posting chunk bytes=7999938 (points=102694)
+[10:38:29 DBG] Posting chunk bytes=7999992 (points=102695)
+[10:38:30 DBG] Posting chunk bytes=7999950 (points=102694)
+[10:38:31 DBG] Posting chunk bytes=7999923 (points=102692)
+[10:38:31 DBG] Posting chunk bytes=7999944 (points=102697)
+[10:38:32 INF] Successfully wrote 102694 points (Total: 1080476) in chunk (bytes=7999950)
+[10:38:32 INF] Successfully wrote 102697 points (Total: 1117212) in chunk (bytes=7999977)
+[10:38:32 INF] Successfully wrote 102699 points (Total: 1294450) in chunk (bytes=7999983)
+[10:38:32 INF] Successfully wrote 102694 points (Total: 1147715) in chunk (bytes=7999938)
+[10:38:32 INF] Successfully wrote 102695 points (Total: 1032737) in chunk (bytes=7999992)
+[10:38:32 DBG] Posting chunk bytes=7999998 (points=102695)
+[10:38:32 DBG] Posting chunk bytes=7999968 (points=102694)
+[10:38:32 INF] Successfully wrote 102695 points (Total: 1097027) in chunk (bytes=7999974)
+[10:38:32 DBG] Posting chunk bytes=7999938 (points=102695)
+[10:38:32 INF] Successfully wrote 102692 points (Total: 1104980) in chunk (bytes=7999923)
+[10:38:32 INF] Successfully wrote 102697 points (Total: 1456255) in chunk (bytes=7999944)
+[10:38:32 DBG] Posting chunk bytes=7999959 (points=102694)
+[10:38:33 DBG] Posting chunk bytes=7999974 (points=102699)
+[10:38:33 DBG] Posting chunk bytes=7999993 (points=102696)
+[10:38:33 DBG] Posting chunk bytes=7999953 (points=102695)
+[10:38:33 DBG] Posting chunk bytes=7999946 (points=102695)
+[RunLogger] Event: 2025-09-19T10:38:33.4950584+00:00,THREAD_7_END,SUCCESS
 [RunLogger] Flushed event: THREAD_7_END
 [THREAD 7] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:25.9008143+00:00,THREAD_3_END,SUCCESS
-[RunLogger] Flushed event: THREAD_3_END
-[THREAD 3] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:27.0881798+00:00,THREAD_6_END,SUCCESS
-[RunLogger] Flushed event: THREAD_6_END
-[THREAD 6] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:27.1212824+00:00,THREAD_5_END,SUCCESS
+[RunLogger] Event: 2025-09-19T10:38:33.9980694+00:00,THREAD_5_END,SUCCESS
 [RunLogger] Flushed event: THREAD_5_END
 [THREAD 5] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:27.1651117+00:00,THREAD_2_END,SUCCESS
-[RunLogger] Flushed event: THREAD_2_END
-[THREAD 2] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:27.3434467+00:00,THREAD_4_END,SUCCESS
+[RunLogger] Event: 2025-09-19T10:38:34.3085336+00:00,THREAD_6_END,SUCCESS
+[RunLogger] Flushed event: THREAD_6_END
+[THREAD 6] Completed successfully
+[RunLogger] Event: 2025-09-19T10:38:34.3504889+00:00,THREAD_4_END,SUCCESS
 [RunLogger] Flushed event: THREAD_4_END
 [THREAD 4] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:27.5574759+00:00,THREAD_0_END,SUCCESS
-[RunLogger] Flushed event: THREAD_0_END
-[THREAD 0] Completed successfully
-[RunLogger] Event: 2025-09-18T13:40:27.5946028+00:00,THREAD_1_END,SUCCESS
+[RunLogger] Event: 2025-09-19T10:38:34.3915876+00:00,THREAD_2_END,SUCCESS
+[RunLogger] Flushed event: THREAD_2_END
+[THREAD 2] Completed successfully
+[RunLogger] Event: 2025-09-19T10:38:34.4596393+00:00,THREAD_3_END,SUCCESS
+[RunLogger] Flushed event: THREAD_3_END
+[THREAD 3] Completed successfully
+[RunLogger] Event: 2025-09-19T10:38:34.4644279+00:00,THREAD_1_END,SUCCESS
 [RunLogger] Flushed event: THREAD_1_END
 [THREAD 1] Completed successfully
-[13:40:30 WRN] Write attempt 1 failed
+[RunLogger] Event: 2025-09-19T10:38:34.5100453+00:00,THREAD_0_END,SUCCESS
+[RunLogger] Flushed event: THREAD_0_END
+[THREAD 0] Completed successfully
+[10:38:38 WRN] Write attempt 1 failed
 System.Threading.Tasks.TaskCanceledException: The operation was canceled.
  ---> System.Net.Http.HttpIOException: The response ended prematurely. (ResponseEnded)
    at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
@@ -121,14 +131,13 @@ System.Threading.Tasks.TaskCanceledException: The operation was canceled.
    at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
    at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:31 WRN] Write attempt 1 failed
+[10:38:39 WRN] Write attempt 1 failed
 System.Threading.Tasks.TaskCanceledException: The operation was canceled.
  ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
  ---> System.Net.Sockets.SocketException (125): Operation canceled
    --- End of inner exception stack trace ---
    at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
    at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
-   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
    at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
    --- End of inner exception stack trace ---
    at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
@@ -136,207 +145,212 @@ System.Threading.Tasks.TaskCanceledException: The operation was canceled.
    at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
    at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:31 DBG] Posting chunk bytes=7999956 (points=102695)
-[13:40:31 WRN] Write attempt 2 failed
+[10:38:39 DBG] Posting chunk bytes=7999944 (points=102697)
+[10:38:39 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:31 DBG] Posting chunk bytes=7999941 (points=102696)
-[13:40:31 WRN] Write attempt 2 failed
+[10:38:39 WRN] Write attempt 1 failed
+System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
+ ---> System.Net.Sockets.SocketException (125): Operation canceled
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:39 WRN] Write attempt 1 failed
+System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
+ ---> System.Net.Sockets.SocketException (125): Operation canceled
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:39 WRN] Write attempt 1 failed
+System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
+ ---> System.Net.Sockets.SocketException (125): Operation canceled
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:39 WRN] Write attempt 1 failed
+System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
+ ---> System.Net.Sockets.SocketException (125): Operation canceled
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:39 WRN] Write attempt 1 failed
+System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
+ ---> System.Net.Sockets.SocketException (125): Operation canceled
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:39 DBG] Posting chunk bytes=7999983 (points=102699)
+[10:38:39 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 DBG] Posting chunk bytes=7999956 (points=102695)
-[13:40:32 WRN] Write attempt 3 failed
-System.ObjectDisposedException: Cannot access a disposed object.
-Object name: 'System.Net.Http.HttpClient'.
-   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
-   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 ERR] All write attempts failed for batch of 544308 points
-[13:40:32 DBG] Posting chunk bytes=7999941 (points=102696)
-[13:40:32 WRN] Write attempt 3 failed
-System.ObjectDisposedException: Cannot access a disposed object.
-Object name: 'System.Net.Http.HttpClient'.
-   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
-   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 ERR] All write attempts failed for batch of 524350 points
-[13:40:32 WRN] Write attempt 1 failed
-System.Threading.Tasks.TaskCanceledException: The operation was canceled.
- ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
- ---> System.Net.Sockets.SocketException (125): Operation canceled
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
-   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
-   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 WRN] Write attempt 1 failed
-System.Threading.Tasks.TaskCanceledException: The operation was canceled.
- ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
- ---> System.Net.Sockets.SocketException (125): Operation canceled
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
-   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
-   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 WRN] Write attempt 1 failed
-System.Threading.Tasks.TaskCanceledException: The operation was canceled.
- ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
- ---> System.Net.Sockets.SocketException (125): Operation canceled
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
-   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
-   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 WRN] Write attempt 1 failed
-System.Threading.Tasks.TaskCanceledException: The operation was canceled.
- ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
- ---> System.Net.Sockets.SocketException (125): Operation canceled
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
-   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:32 WRN] Write attempt 1 failed
-System.Threading.Tasks.TaskCanceledException: The operation was canceled.
- ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
- ---> System.Net.Sockets.SocketException (125): Operation canceled
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   --- End of inner exception stack trace ---
-   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
-   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 WRN] Write attempt 1 failed
-System.Threading.Tasks.TaskCanceledException: A task was canceled.
-   at System.Net.Http.HttpConnectionResponseContent.<SerializeToStreamAsync>g__Impl|6_0(Stream stream, CancellationToken cancellationToken)
-   at System.Net.Http.HttpContent.LoadIntoBufferAsyncCore(Task serializeToStreamTask, MemoryStream tempBuffer)
-   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
-   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[RunLogger] Event: 2025-09-18T13:40:35.2827280+00:00,SCENARIO_END,SUCCESS
+[RunLogger] Event: 2025-09-19T10:38:39.6671846+00:00,SCENARIO_END,SUCCESS
 [RunLogger] Flushed event: SCENARIO_END
 Waiting 10 seconds before exiting...
-[13:40:35 DBG] Posting chunk bytes=7999944 (points=102696)
-[13:40:35 WRN] Write attempt 2 failed
+[10:38:39 WRN] Write attempt 1 failed
+System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: Operation canceled.
+ ---> System.Net.Sockets.SocketException (125): Operation canceled
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:40 DBG] Posting chunk bytes=7999977 (points=102697)
+[10:38:40 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 DBG] Posting chunk bytes=7999959 (points=102689)
-[13:40:35 WRN] Write attempt 2 failed
+[10:38:40 DBG] Posting chunk bytes=7999938 (points=102694)
+[10:38:40 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 DBG] Posting chunk bytes=7999986 (points=102694)
-[13:40:35 WRN] Write attempt 2 failed
+[10:38:40 DBG] Posting chunk bytes=7999974 (points=102695)
+[10:38:40 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 DBG] Posting chunk bytes=7999980 (points=102695)
-[13:40:35 WRN] Write attempt 2 failed
+[10:38:40 DBG] Posting chunk bytes=7999992 (points=102695)
+[10:38:40 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 DBG] Posting chunk bytes=7999992 (points=102693)
-[13:40:35 WRN] Write attempt 2 failed
+[10:38:40 DBG] Posting chunk bytes=7999950 (points=102694)
+[10:38:40 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 DBG] Posting chunk bytes=7999941 (points=102695)
-[13:40:35 WRN] Write attempt 2 failed
+[10:38:40 DBG] Posting chunk bytes=7999944 (points=102697)
+[10:38:40 WRN] Write attempt 3 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 DBG] Posting chunk bytes=7999944 (points=102696)
-[13:40:35 WRN] Write attempt 3 failed
+[10:38:40 ERR] All write attempts failed for batch of 473767 points
+[10:38:40 DBG] Posting chunk bytes=7999923 (points=102692)
+[10:38:40 WRN] Write attempt 2 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:35 ERR] All write attempts failed for batch of 484614 points
-[13:40:36 DBG] Posting chunk bytes=7999959 (points=102689)
-[13:40:36 WRN] Write attempt 3 failed
+[10:38:40 DBG] Posting chunk bytes=7999983 (points=102699)
+[10:38:40 WRN] Write attempt 3 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:36 ERR] All write attempts failed for batch of 508198 points
-[13:40:36 DBG] Posting chunk bytes=7999986 (points=102694)
-[13:40:36 DBG] Posting chunk bytes=7999980 (points=102695)
-[13:40:36 WRN] Write attempt 3 failed
+[10:38:40 ERR] All write attempts failed for batch of 277824 points
+[10:38:41 DBG] Posting chunk bytes=7999977 (points=102697)
+[10:38:41 WRN] Write attempt 3 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:36 ERR] All write attempts failed for batch of 462147 points
-[13:40:36 WRN] Write attempt 3 failed
+[10:38:41 ERR] All write attempts failed for batch of 245168 points
+[10:38:41 DBG] Posting chunk bytes=7999974 (points=102695)
+[10:38:41 WRN] Write attempt 3 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:36 ERR] All write attempts failed for batch of 301353 points
-[13:40:36 DBG] Posting chunk bytes=7999941 (points=102695)
-[13:40:36 DBG] Posting chunk bytes=7999992 (points=102693)
-[13:40:36 WRN] Write attempt 3 failed
+[10:38:41 ERR] All write attempts failed for batch of 206238 points
+[10:38:41 DBG] Posting chunk bytes=7999938 (points=102694)
+[10:38:41 WRN] Write attempt 3 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:36 ERR] All write attempts failed for batch of 262145 points
-[13:40:36 WRN] Write attempt 3 failed
+[10:38:41 ERR] All write attempts failed for batch of 331091 points
+[10:38:41 DBG] Posting chunk bytes=7999992 (points=102695)
+[10:38:41 WRN] Write attempt 3 failed
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'System.Net.Http.HttpClient'.
    at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
    at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
    at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
-[13:40:36 ERR] All write attempts failed for batch of 431320 points
+[10:38:41 ERR] All write attempts failed for batch of 358371 points
+[10:38:41 DBG] Posting chunk bytes=7999923 (points=102692)
+[10:38:41 WRN] Write attempt 3 failed
+System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:41 ERR] All write attempts failed for batch of 524289 points
+[10:38:41 DBG] Posting chunk bytes=7999950 (points=102694)
+[10:38:41 WRN] Write attempt 3 failed
+System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at Workload.InfluxWriter.FlushAsync() in /src/src/InfluxWriter.cs:line 183
+[10:38:41 ERR] All write attempts failed for batch of 415105 points
 [RunLogger] Disposing logger and flushing file
-[13:40:45 INF] END 2025-09-18T13:40:45.2975042Z
+[10:38:49 INF] END 2025-09-19T10:38:49.6753165Z

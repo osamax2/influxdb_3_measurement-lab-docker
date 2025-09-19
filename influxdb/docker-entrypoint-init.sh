@@ -24,7 +24,6 @@ echo "Preparing data dir: $INFLUXDB_DATA_DIR"
 # Map environment tuning to supported CLI flags. Some older names may differ
 # between releases; use conservative names reported by the 'serve' help output.
 PERF_FLAGS="--wal-max-write-buffer-size ${INFLUXDB_WAL_BUFFER_SIZE} \
-            --wal-max-batch-size ${INFLUXDB_WAL_MAX_BATCH_SIZE} \
             --wal-flush-interval ${INFLUXDB_WAL_FLUSH_INTERVAL}"
 echo '* soft nofile 131072' >> /etc/security/limits.conf
 echo '* hard nofile 262144' >> /etc/security/limits.conf
