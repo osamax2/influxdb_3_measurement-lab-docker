@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Workload;
@@ -38,7 +39,71 @@ public static class Program
             // InfluxDB 3 uses org/bucket and token
             string org = Env("INFLUX_ORG", required: true);
             string bucket = Env("INFLUX_BUCKET", "benchdb");
-            string token = Env("INFLUX_TOKEN", required: true);
+            // Allow token from env or from mounted /run/influx_token file (pre-persisted by influx image)
+            string token = Env("INFLUX_TOKEN", null);
+
+            // If env contains JSON (e.g. {"token":"apiv3_xxx"}), extract token field via JSON parser
+            if (!string.IsNullOrEmpty(token))
+            {
+                var trimmed = token.Trim();
+                if (trimmed.StartsWith('{'))
+                {
+                    try
+                    {
+                        using var doc = JsonDocument.Parse(trimmed);
+                        if (doc.RootElement.TryGetProperty("token", out var tokProp) && tokProp.ValueKind == JsonValueKind.String)
+                        {
+                            token = tokProp.GetString()!;
+                            Console.WriteLine("[CONFIG] Extracted token from INFLUX_TOKEN env JSON");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[CONFIG WARNING] Failed to parse INFLUX_TOKEN JSON: {ex.Message}");
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(token))
+            {
+                // Try mounted token file (container path /run/influx_token or project ./run/influx_token)
+                string[] candidates = { "/run/influx_token", "./run/influx_token" };
+                foreach (var path in candidates)
+                {
+                    try
+                    {
+                        if (!File.Exists(path)) continue;
+                        var content = File.ReadAllText(path).Trim();
+                        if (content.StartsWith('{'))
+                        {
+                            try
+                            {
+                                using var doc = JsonDocument.Parse(content);
+                                if (doc.RootElement.TryGetProperty("token", out var tokProp) && tokProp.ValueKind == JsonValueKind.String)
+                                {
+                                    token = tokProp.GetString()!;
+                                    Console.WriteLine($"[CONFIG] Loaded token from file: {path}");
+                                    break;
+                                }
+                            }
+                            catch { /* continue to fallback */ }
+                        }
+                        // fallback: file may contain raw token
+                        if (!string.IsNullOrEmpty(content))
+                        {
+                            token = content;
+                            Console.WriteLine($"[CONFIG] Loaded raw token from file: {path}");
+                            break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[CONFIG WARNING] Failed to read token file {path}: {ex.Message}");
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(token)) throw new ConfigException("Missing required environment variable: INFLUX_TOKEN (and no /run/influx_token found)");
             string measStr = Env("MEASUREMENTS", "test");
             string tagStr = Env("TAGS", "");
 
@@ -197,12 +262,16 @@ public static class Program
                 logger.Event($"THREAD_{idx}_START", n.ToString());
                 Console.WriteLine($"[THREAD {idx}] Processing {n} points");
 
-                tasks.Add(Task.Run(async () =>
+        // Read optional chunk size from env so tests can tune HTTP request sizes
+        int chunkSize = ParseNumberEnv("CHUNK_SIZE_BYTES", 4000000);
+
+        tasks.Add(Task.Run(async () =>
                 {
                     try
                     {
                         var lines = WorkloadAsyncLines(measurements, tags, n, tsStart, tsSpan, seriesMult);
-                        using var writer = new InfluxWriter(host, port, org, bucket, token, batchSize);
+                        int flushInterval = ParseNumberEnv("FLUSH_INTERVAL_MS", 1000);
+            using var writer = new InfluxWriter(host, port, org, bucket, token, batchSize, flushInterval, useGzip: false, chunkSizeBytes: chunkSize);
                         await writer.WritePointsAsync(lines);
                         logger.Event($"THREAD_{idx}_END", "SUCCESS");
                         Console.WriteLine($"[THREAD {idx}] Completed successfully");
@@ -262,7 +331,7 @@ public static class Program
         }
     }
 
-    private static async IAsyncEnumerable<string> WorkloadAsyncLines(
+    private static IAsyncEnumerable<string> WorkloadAsyncLines(
         IEnumerable<string> measurements,
         IDictionary<string, string> tags,
         long count,
@@ -270,11 +339,15 @@ public static class Program
         int tsSpanSec,
         int seriesMultiplier)
     {
-        foreach (var line in PointGenerator.Generate(measurements.ToArray(), tags, count, tsStart, tsSpanSec, seriesMultiplier))
-        {
-            yield return line;
-            await Task.Yield();
-        }
+        // Wrap the synchronous generator into an async enumerable to avoid an
+        // unnecessary async state machine for each yielded value.
+        return AsyncEnumerableFromEnumerable(PointGenerator.Generate(measurements.ToArray(), tags, count, tsStart, tsSpanSec, seriesMultiplier));
+    }
+
+    private static async IAsyncEnumerable<string> AsyncEnumerableFromEnumerable(IEnumerable<string> src)
+    {
+        foreach (var s in src) yield return s;
+        await Task.CompletedTask;
     }
 
     #region Helper Classes and Methods

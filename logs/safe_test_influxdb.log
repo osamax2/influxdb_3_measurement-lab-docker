@@ -1,0 +1,58 @@
+time="2025-09-18T16:33:55+03:00" level=warning msg="The \"INFLUX_BUCKET\" variable is not set. Defaulting to a blank string."
+time="2025-09-18T16:33:55+03:00" level=warning msg="/Users/osamaalabaji/Downloads/influxdb_3_measurement-lab-docker/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+influxdb-1  | Preparing data dir: /var/lib/influxdb
+influxdb-1  | vm.swappiness = 1
+influxdb-1  | vm.dirty_ratio = 10
+influxdb-1  | vm.dirty_background_ratio = 5
+influxdb-1  | sysctl: setting key "vm.swappiness", ignoring: Read-only file system
+influxdb-1  | sysctl: setting key "vm.dirty_ratio", ignoring: Read-only file system
+influxdb-1  | sysctl: setting key "vm.dirty_background_ratio", ignoring: Read-only file system
+influxdb-1  | No INFLUXDB_MOUNT_DEVICE configured; skipping device mount
+influxdb-1  | Persisted INFLUX_TOKEN from env to /run/influx_token (0600)
+influxdb-1  | Found JSON admin token file at /run/influx_token; will pass --admin-token-file to server
+influxdb-1  | Starting influxdb3 server in background with http-bind=0.0.0.0:8086...
+influxdb-1  | Waiting for InfluxDB to become ready (HTTP health)...
+influxdb-1  | InfluxDB HTTP responded with status 000000
+influxdb-1  | Creating database (if missing): my-bucket
+influxdb-1  | 2025-09-18T13:33:54.852447Z  INFO influxdb3_lib::commands::serve: InfluxDB 3 Core server starting node_id=node1 git_hash=571299afed3644c69811df9a71816446af64dec0 version=3.4.2 uuid=6e2ae571-537e-48c8-b5bb-e6866ee13401 num_cpus=4
+influxdb-1  | 2025-09-18T13:33:54.854741Z  INFO influxdb3_clap_blocks::object_store: Object Store db_dir="/var/lib/influxdb" object_store_type="Directory"
+influxdb-1  | 2025-09-18T13:33:54.857515Z  INFO influxdb3_lib::commands::serve: Creating shared query executor num_threads=4
+influxdb-1  | Creating admin token (ensure a server-registered token is written to /run/influx_token)
+influxdb-1  | Waiting for management API on one of: 8181 8086 (up to 120s)
+influxdb-1  | 2025-09-18T13:33:54.931716Z  INFO influxdb3_catalog::object_store::versions::v2: catalog not found, creating a new one catalog_uuid=ed40e1b4-6233-48d7-855d-b951595c15f8
+influxdb-1  | 2025-09-18T13:33:54.932328Z  INFO influxdb3_catalog::object_store::versions::v2: persisted catalog checkpoint file sequence=0
+influxdb-1  | 2025-09-18T13:33:54.932348Z  INFO influxdb3_catalog::catalog::versions::v2::update: create database name="_internal"
+influxdb-1  | 2025-09-18T13:33:54.932419Z  INFO influxdb3_catalog::catalog::versions::v2: creating new database database_name="_internal"
+influxdb-1  | 2025-09-18T13:33:54.933040Z  INFO influxdb3_catalog::object_store::versions::v2: persisted next catalog sequence put_result=PutResult { e_tag: Some("8-63f136793cf9f-ed"), version: None } object_path=CatalogFilePath(Path { raw: "node1/catalog/v2/logs/00000000000000000001.catalog" })
+influxdb-1  | 2025-09-18T13:33:54.935785Z  INFO influxdb3_catalog::catalog::versions::v2: created internal database
+influxdb-1  | 2025-09-18T13:33:54.935824Z  INFO influxdb3_lib::commands::serve: catalog initialized catalog_uuid=ed40e1b4-6233-48d7-855d-b951595c15f8
+influxdb-1  | 2025-09-18T13:33:54.935830Z  INFO influxdb3_lib::commands::serve: Initializing table index cache node_id="node1" max_entries=Some(100) concurrency_limit=20
+influxdb-1  | 2025-09-18T13:33:54.937066Z  INFO influxdb3_write::table_index_cache: creating table indices from split snapshots
+influxdb-1  | 2025-09-18T13:33:54.937374Z  WARN influxdb3_write::table_index_cache: Retrying conversion marker load after error error=Object at location /var/lib/influxdb/node1/table-index-conversion-completed not found: No such file or directory (os error 2) retry_after_ms=50 path=node1/table-index-conversion-completed
+influxdb-1  | 2025-09-18T13:33:54.990199Z  WARN influxdb3_write::table_index_cache: Retrying conversion marker load after error error=Object at location /var/lib/influxdb/node1/table-index-conversion-completed not found: No such file or directory (os error 2) retry_after_ms=100 path=node1/table-index-conversion-completed
+influxdb-1  | 2025-09-18T13:33:55.092009Z  INFO influxdb3_write::table_index_cache: loading all snapshot object metas
+influxdb-1  | 2025-09-18T13:33:55.094404Z  INFO influxdb3_write::table_index_cache: Starting table index cache synchronization from object store node_prefix=node1
+influxdb-1  | 2025-09-18T13:33:55.095198Z  INFO influxdb3_write::table_index_cache: Completed table index cache synchronization duration_ms=0 indices_updated=0 indices_created=0 total_cached=0 cache_capacity=Some(100)
+influxdb-1  | 2025-09-18T13:33:55.095974Z  INFO influxdb3_lib::commands::serve: Initializing admin token from file: /run/influx_token
+influxdb-1  | 2025-09-18T13:33:55.096159Z  INFO influxdb3_write::retention_period_handler: Starting retention period handler background task check_interval_seconds=1800
+influxdb-1  | 2025-09-18T13:33:55.098834Z  INFO influxdb3_lib::commands::serve: Loaded admin token from file, name: _admin
+influxdb-1  | 2025-09-18T13:33:55.099689Z  INFO influxdb3_catalog::object_store::versions::v2: persisted next catalog sequence put_result=PutResult { e_tag: Some("a-63f136796580f-1be"), version: None } object_path=CatalogFilePath(Path { raw: "node1/catalog/v2/logs/00000000000000000002.catalog" })
+influxdb-1  | 2025-09-18T13:33:55.101458Z  INFO influxdb3_lib::commands::serve: Admin token '_admin' initialized from file
+influxdb-1  | 2025-09-18T13:33:55.102235Z  INFO influxdb3_catalog::catalog::versions::v2::update: register node node_id="node1" core_count=4 mode=[Core] cli_params=Some("{\"wal-flush-interval\":\"10s\",\"data-dir\":\"/var/lib/influxdb\",\"admin-token-file\":\"*******\",\"plugin-dir\":\"/plugins\",\"http-bind\":\"0.0.0.0:8086\",\"object-store\":\"file\",\"node-id\":\"node1\",\"wal-max-write-buffer-size\":\"100000\",\"log-filter\":\"info\",\"max-http-request-size\":\"20971520\"}")
+influxdb-1  | 2025-09-18T13:33:55.102287Z  INFO influxdb3_catalog::catalog::versions::v2::update: registering new node to the catalog node_id="node1" instance_id="eae03c29-99fc-4ba2-bf8e-2f65c819a067"
+influxdb-1  | 2025-09-18T13:33:55.102669Z  INFO influxdb3_catalog::object_store::versions::v2: persisted next catalog sequence put_result=PutResult { e_tag: Some("b-63f13679663c7-2a9"), version: None } object_path=CatalogFilePath(Path { raw: "node1/catalog/v2/logs/00000000000000000003.catalog" })
+influxdb-1  | 2025-09-18T13:33:55.102880Z  INFO influxdb3_lib::commands::serve: catalog initialized instance_id="eae03c29-99fc-4ba2-bf8e-2f65c819a067"
+influxdb-1  | 2025-09-18T13:33:55.103760Z  INFO influxdb3_catalog::catalog::versions::v2::update: set gen1 duration duration_ns=600000000000
+influxdb-1  | 2025-09-18T13:33:55.103970Z  INFO influxdb3_catalog::object_store::versions::v2: persisted next catalog sequence put_result=PutResult { e_tag: Some("c-63f1367966b97-b2"), version: None } object_path=CatalogFilePath(Path { raw: "node1/catalog/v2/logs/00000000000000000004.catalog" })
+influxdb-1  | 2025-09-18T13:33:55.104307Z  INFO influxdb3_wal::object_store: replaying WAL files
+influxdb-1  | 2025-09-18T13:33:55.104404Z  INFO influxdb3_wal::object_store: completed replaying wal files time_taken=96.958µs
+influxdb-1  | 2025-09-18T13:33:55.104519Z  INFO influxdb3_lib::commands::serve: setting up background mem check for query buffer
+influxdb-1  | 2025-09-18T13:33:55.104544Z  INFO influxdb3_lib::commands::serve: setting up telemetry store
+influxdb-1  | 2025-09-18T13:33:55.104593Z  INFO influxdb3_write::deleter: Started catalog hard deleter task. delete_grace_period=86400s
+influxdb-1  | 2025-09-18T13:33:56.956649Z  INFO influxdb3_lib::commands::serve: setting up server with authz disabled for paths paths_without_authz=[]
+influxdb-1  | 2025-09-18T13:33:56.957538Z  INFO influxdb3_server: startup time: 2107ms address=0.0.0.0:8086
+influxdb-1  | 2025-09-18T13:33:56.958226Z ERROR influxdb3_server::http: cannot authenticate token e=MissingToken
+influxdb-1  | 2025-09-18T13:33:57.981729Z  INFO influxdb3_catalog::object_store::versions::v2: persisted next catalog sequence put_result=PutResult { e_tag: Some("d-63f1367c251df-764"), version: None } object_path=CatalogFilePath(Path { raw: "node1/catalog/v2/logs/00000000000000000005.catalog" })
+influxdb-1  | 2025-09-18T13:34:05.108064Z  INFO influxdb3_wal::object_store: flushing WAL buffer to object store host="node1" n_ops=1 min_timestamp_ns=1758202437190000000 max_timestamp_ns=1758202437190000000 wal_file_number=1
+[Kinfluxdb-1 has been recreated
+

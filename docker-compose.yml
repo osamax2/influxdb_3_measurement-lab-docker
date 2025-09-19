@@ -12,18 +12,42 @@ services:
       INFLUXDB_3_ADMIN_TOKEN: "${INFLUXDB_3_ADMIN_TOKEN}"
       INFLUXDB_ORG: "${INFLUX_ORG}"
       INFLUXDB_BUCKET: "${INFLUX_BUCKET}"
-      INFLUX_TOKEN: "${INFLUX_TOKEN}"
-      RUST_LOG: "influxdb3_server=info"
-      # For short-term testing only: disable auth so workload can write without a token.
       INFLUX_DISABLE_AUTH: "1"
+      INFLUX_TOKEN: "${INFLUX_TOKEN}"
+      RUST_LOG: "influxdb3_server=info,influxdb3_wal=debug,influxdb3_write=debug"
+      # Performance Optimizations
+      INFLUXDB_SQLITE_CACHE_SIZE: "4000000000"  # Increased to 4GB
+      # Note: the serve flag --wal-max-write-buffer-size expects a number of
+      # write requests (not bytes). Use a reasonable default request-count.
+      INFLUXDB_WAL_BUFFER_SIZE: "100000"
+      INFLUXDB_WAL_MAX_BATCH_SIZE: "33554432"   # (unused on this server version) kept for compatibility
+      INFLUXDB_WAL_FLUSH_INTERVAL: "10s"         # Increase flush interval to let more ops accumulate
+      # Allow larger HTTP request bodies (default 10MB). Set to 20MB to permit bigger batched posts.
+      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "20971520"
+      INFLUXDB_QUERY_MEMORY_BYTES: "2147483648" # 2GB query memory
+      INFLUXDB_MAX_CONCURRENT_QUERIES: "16"     # Limit concurrent queries
     volumes:
       - influxdb-data:/var/lib/influxdb
       - ./run:/run
+      # Mount tmpfs for WAL directory (critical for performance)
+      - type: tmpfs
+        target: /var/lib/influxdb/wal
+        tmpfs:
+          size: 1073741824  # 1GB
+    ulimits:
+      nofile:
+        soft: 131072
+        hard: 262144
     healthcheck:
       test: ["CMD-SHELL", "sh -c \"sed -i 's/\\r$//' /usr/local/bin/healthcheck.sh || true; sh /usr/local/bin/healthcheck.sh | grep -q '^[12][0-9][0-9]'\""]
       interval: 15s
       timeout: 3s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 8G  # Increased memory
+          cpus: '4'   # More CPU cores
 
   workload:
     build: ./workload
@@ -41,6 +65,8 @@ services:
       POINTS: ${POINTS}
       MEASUREMENTS: ${MEASUREMENTS}
       TAGS: ${TAGS}
+      FLUSH_INTERVAL_MS: ${FLUSH_INTERVAL_MS}
+      USE_GZIP: ${USE_GZIP}
       BATCH_SIZE: ${BATCH_SIZE}
       PARALLEL_CLIENTS: ${PARALLEL_CLIENTS}
       TIMESTAMP_SPAN_SEC: ${TIMESTAMP_SPAN_SEC}
@@ -56,5 +82,9 @@ services:
     command: ["/entrypoint.sh"]
 
 volumes:
-  influxdb-data: {}
-
+  influxdb-data:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=20G  # Use tmpfs for data volume if possible

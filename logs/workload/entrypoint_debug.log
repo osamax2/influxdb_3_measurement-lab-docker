@@ -1,20 +1,21 @@
-[entrypoint.sh] Starting Workload container at Wed Sep 17 16:24:06 UTC 2025
--rw-r--r-- 1 worker worker 33280 Sep 16 16:23 /app/Workload.dll
+[entrypoint.sh] Starting Workload container at Thu Sep 18 13:40:13 UTC 2025
+-rw-r--r-- 1 worker worker 39424 Sep 18 13:25 /app/Workload.dll
 [entrypoint.sh] Valid DURATION_SEC: 10
-[entrypoint.sh] Valid BATCH_SIZE: 5000
+[entrypoint.sh] Valid BATCH_SIZE: 200000
 [entrypoint.sh] Valid INFLUX_PORT: 8086
-[entrypoint.sh] Valid POINTS: 10000
+[entrypoint.sh] Valid POINTS: 2000000
 [entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 0
-[entrypoint.sh] Valid PARALLEL_CLIENTS: 1
-[entrypoint.sh] Valid SERIES_MULTIPLIER: 1
+[entrypoint.sh] Valid PARALLEL_CLIENTS: 8
+[entrypoint.sh] Valid SERIES_MULTIPLIER: 2
 [entrypoint.sh] ENV VARS:
 TAGS=site=lab,host=testnode
-POINTS=10000
+POINTS=2000000
 INFLUXDB_ORG=my-org
 INFLUXDB_ADMIN_PASSWORD=changeme
 INFLUXDB_BUCKET=my-bucket
 INFLUXDB_HTTP_BIND_ADDRESS=:8086
-SCENARIO=small_ordered_same_ts
+SCENARIO=large_simul_same_ts
+INFLUX_BUCKET=my-bucket
 MEASUREMENTS=cpu_temp,pressure,humidity
 TIMESTAMP_SPAN_SEC=0
 REPORT_NAME=run
@@ -26,20 +27,21 @@ INFLUX_ORG=my-org
 INFLUXDB_ADMIN_USER=admin
 INFLUXDB_RETENTION=0
 INFLUX_TOKEN=apiv3_testtoken123
-PARALLEL_CLIENTS=1
+PARALLEL_CLIENTS=8
 INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
-SERIES_MULTIPLIER=1
-BATCH_SIZE=5000
+SERIES_MULTIPLIER=2
+BATCH_SIZE=200000
 DURATION_SEC=10
 INFLUX_HOST=influxdb
 [entrypoint.sh] Waiting for InfluxDB at http://influxdb:8086/health (up to 60 s)
 [entrypoint.sh] InfluxDB health responded: 200
+[entrypoint.sh] Loaded INFLUX_TOKEN from /run/influx_token
 [entrypoint.sh] Waiting for TCP influxdb:8086 (up to 60 s)
 [entrypoint.sh] TCP influxdb:8086 is reachable
 [entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
 [entrypoint.sh] Listing /logs/workload before workload execution:
-total 144
--rw-r--r-- 1 worker worker  1443 Sep 17 16:24 entrypoint_debug.log
--rw-r--r-- 1 worker worker 67593 Sep 17 16:17 environment_variables.log
--rw-r--r-- 1 worker worker   328 Sep 17 16:17 run.csv
--rw-r--r-- 1 worker worker  6649 Sep 17 16:17 workload_stdout.log
+total 140
+-rw-r--r-- 1 worker worker   1532 Sep 18 13:40 entrypoint_debug.log
+-rw-r--r-- 1 worker worker 103961 Sep 18 13:33 environment_variables.log
+-rw-r--r-- 1 worker worker    613 Sep 18 13:34 run.csv
+-rw-r--r-- 1 worker worker   3610 Sep 18 13:34 workload_stdout.log
