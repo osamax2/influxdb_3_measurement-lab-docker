@@ -242,3 +242,25 @@
 [RunLogger] Event: 2025-09-29T23:32:21.2969380+00:00,SCENARIO_END,SUCCESS
 [RunLogger] Flushed event: SCENARIO_END
 Waiting 10 seconds before exiting...
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32721)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32745)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32733)
+[23:32:27 DBG] Posting chunk bytes=32768 (points=614)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32725)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32729)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32737)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32725)
+[23:32:27 DBG] Posting chunk bytes=32741 (points=613)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32730)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32725)
+[23:32:27 DBG] Posting chunk bytes=32737 (points=613)
+[23:32:27 DBG] Posting chunk bytes=32768 (points=614)
+[23:32:27 DBG] Posting chunk bytes=32733 (points=613)
+[23:32:27 DBG] Posting chunk bytes=32729 (points=613)
+[23:32:27 INF] Successfully wrote 613 points (Total: 4000000) in chunk (bytes=32758)
+[23:32:27 DBG] Posting chunk bytes=32721 (points=613)
+[23:32:27 DBG] Posting chunk bytes=32740 (points=613)
+[23:32:27 DBG] Posting chunk bytes=32733 (points=613)
+[23:32:27 DBG] Posting chunk bytes=32740 (points=613)
+[RunLogger] Disposing logger and flushing file
+[23:32:31 INF] END 2025-09-29T23:32:31.3055035Z
