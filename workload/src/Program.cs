@@ -40,7 +40,8 @@ public static class Program
             string org = Env("INFLUX_ORG", required: true);
             string bucket = Env("INFLUX_BUCKET", "benchdb");
             // Allow token from env or from mounted /run/influx_token file (pre-persisted by influx image)
-            string token = Env("INFLUX_TOKEN", null);
+            // Token is optional when server runs with --without-auth
+            string? token = Env("INFLUX_TOKEN", null);
 
             // If env contains JSON (e.g. {"token":"apiv3_xxx"}), extract token field via JSON parser
             if (!string.IsNullOrEmpty(token))
@@ -103,7 +104,12 @@ public static class Program
                 }
             }
 
-            if (string.IsNullOrEmpty(token)) throw new ConfigException("Missing required environment variable: INFLUX_TOKEN (and no /run/influx_token found)");
+            if (string.IsNullOrEmpty(token))
+            {
+                // No token found. Run in no-auth mode (server must allow unauthenticated writes).
+                Console.WriteLine("[CONFIG WARNING] No INFLUX_TOKEN provided; proceeding without authentication (server must allow writes without auth).");
+                token = null;
+            }
             string measStr = Env("MEASUREMENTS", "test");
             string tagStr = Env("TAGS", "");
 
@@ -262,8 +268,10 @@ public static class Program
                 logger.Event($"THREAD_{idx}_START", n.ToString());
                 Console.WriteLine($"[THREAD {idx}] Processing {n} points");
 
-        // Read optional chunk size from env so tests can tune HTTP request sizes
-        int chunkSize = ParseNumberEnv("CHUNK_SIZE_BYTES", 4000000);
+    // Read optional chunk size from env so tests can tune HTTP request sizes
+    int chunkSize = ParseNumberEnv("CHUNK_SIZE_BYTES", 4000000);
+    // Optional flag to send writes using legacy db-only query param (useful for management ports like 8181)
+    bool useDbOnly = string.Equals(Env("INFLUX_USE_DB_ONLY", "false"), "true", StringComparison.OrdinalIgnoreCase);
 
         tasks.Add(Task.Run(async () =>
                 {
@@ -271,7 +279,7 @@ public static class Program
                     {
                         var lines = WorkloadAsyncLines(measurements, tags, n, tsStart, tsSpan, seriesMult);
                         int flushInterval = ParseNumberEnv("FLUSH_INTERVAL_MS", 1000);
-            using var writer = new InfluxWriter(host, port, org, bucket, token, batchSize, flushInterval, useGzip: false, chunkSizeBytes: chunkSize);
+            using var writer = new InfluxWriter(host, port, org, bucket, token, batchSize, flushInterval, useGzip: false, chunkSizeBytes: chunkSize, useDbOnly: useDbOnly);
                         await writer.WritePointsAsync(lines);
                         logger.Event($"THREAD_{idx}_END", "SUCCESS");
                         Console.WriteLine($"[THREAD {idx}] Completed successfully");
