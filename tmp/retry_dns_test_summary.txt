@@ -1,0 +1,3 @@
+DNS name not known count: 0
+Connection refused count: 0
+Failed post lines total: 0

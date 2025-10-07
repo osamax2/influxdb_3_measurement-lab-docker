@@ -1,0 +1,1 @@
+influxdb_3_measurement-lab-docker-influxdb-1 0.15% 10.61MiB / 6GiB

@@ -273,21 +273,57 @@ public static class Program
     // Optional flag to send writes using legacy db-only query param (useful for management ports like 8181)
     bool useDbOnly = string.Equals(Env("INFLUX_USE_DB_ONLY", "false"), "true", StringComparison.OrdinalIgnoreCase);
 
+    // Read gzip/send concurrency from environment so we can tune without recompiling
+    bool useGzipEnv = string.Equals(Env("USE_GZIP", "false"), "true", StringComparison.OrdinalIgnoreCase);
+    int sendConcurrency = ParseNumberEnv("SEND_CONCURRENCY", 8);
+    // Points per HTTP request (small integer). Default to 4 as requested.
+    int pointsPerRequest = ParseNumberEnv("POINTS_PER_REQUEST", 4);
+            // Optional: use v3 write_lp endpoint instead of v2 write
+            bool useV3WriteLp = string.Equals(Env("USE_V3_WRITE_LP", "false"), "true", StringComparison.OrdinalIgnoreCase);
+            string v3Db = Env("V3_DB", "");
+            bool v3AcceptPartial = string.Equals(Env("V3_ACCEPT_PARTIAL", "true"), "true", StringComparison.OrdinalIgnoreCase);
+            bool v3NoSync = string.Equals(Env("V3_NO_SYNC", "false"), "true", StringComparison.OrdinalIgnoreCase);
+            string v3Precision = Env("V3_PRECISION", "ns");
+
         tasks.Add(Task.Run(async () =>
                 {
                     try
                     {
                         var lines = WorkloadAsyncLines(measurements, tags, n, tsStart, tsSpan, seriesMult);
                         int flushInterval = ParseNumberEnv("FLUSH_INTERVAL_MS", 1000);
-            using var writer = new InfluxWriter(host, port, org, bucket, token, batchSize, flushInterval, useGzip: false, chunkSizeBytes: chunkSize, useDbOnly: useDbOnly);
+            // The InfluxWriter constructor was refactored to accept (host,port,org,bucket,token,batchSize,flushInterval,useGzip,chunkSizeBytes,capacityMultiplier)
+            // Map SEND_CONCURRENCY to capacityMultiplier to control internal channel capacity/backpressure.
+            int capacityMultiplier = Math.Max(1, sendConcurrency);
+                        var opts = new InfluxWriterOptions
+                        {
+                            Host = host,
+                            Port = port,
+                            Org = org,
+                            Bucket = bucket,
+                            Token = token,
+                            BatchSize = batchSize,
+                            FlushIntervalMs = flushInterval,
+                            UseGzip = useGzipEnv,
+                            ChunkSizeBytes = chunkSize,
+                            CapacityMultiplier = capacityMultiplier,
+                            PointsPerRequest = pointsPerRequest,
+                            UseV3WriteLp = useV3WriteLp,
+                            V3Db = v3Db,
+                            AcceptPartial = v3AcceptPartial,
+                            NoSync = v3NoSync,
+                            Precision = v3Precision
+                        };
+
+                        using var writer = new InfluxWriter(opts);
                         await writer.WritePointsAsync(lines);
                         logger.Event($"THREAD_{idx}_END", "SUCCESS");
                         Console.WriteLine($"[THREAD {idx}] Completed successfully");
                     }
                     catch (Exception ex)
                     {
-                        logger.Event($"THREAD_{idx}_ERROR", ex.Message);
-                        Console.WriteLine($"[THREAD {idx}] Failed: {ex.Message}");
+                        // Log full exception (message + stack) so run.csv contains actionable info
+                        logger.Event($"THREAD_{idx}_ERROR", ex.ToString());
+                        Console.WriteLine($"[THREAD {idx}] Failed: {ex}");
                         throw;
                     }
                 }));

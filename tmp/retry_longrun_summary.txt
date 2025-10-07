@@ -1,0 +1,11 @@
+Start: 2025-10-07T05:55:19.5559831+00:00
+End:   2025-10-07T05:56:57.2893768+00:00
+Elapsed s: 97.73
+Points: 200000
+Writes/sec (points/elapsed): 2046.38
+Failed (Connection refused): 242
+Failed (Failed to post lines): 12644
+
+-- docker stats tail (last 40 lines) --
+%c %p %m %n
+%c %p %m %n

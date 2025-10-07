@@ -15,24 +15,20 @@ services:
       INFLUX_DISABLE_AUTH: "1"
       INFLUX_TOKEN: "${INFLUX_TOKEN}"
       RUST_LOG: "influxdb3_server=info,influxdb3_wal=debug,influxdb3_write=debug"
-      # Performance Optimizations tuned for ~4GB host
-      # Reduce cache and buffer sizes to fit in a constrained host while keeping decent write throughput
-      INFLUXDB_SQLITE_CACHE_SIZE: "268435456"   # 256MB sqlite cache
-      INFLUXDB_WAL_BUFFER_SIZE: "100000"         # larger WAL buffer to accumulate more ops per flush
-      INFLUXDB_WAL_FLUSH_INTERVAL: "60s"        # longer flush interval so WAL accumulates more ops per flush
-      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "33554432" # 32MB max request size (>= chunk size)
-      INFLUXDB_QUERY_MEMORY_BYTES: "268435456"  # 256MB query memory
-      INFLUXDB_MAX_CONCURRENT_QUERIES: "4"      # fewer concurrent queries during heavy write load
-      INFLUXDB_WRITE_BUFFER_SIZE: "134217728"   # 128MB write buffer
+      INFLUXDB_SQLITE_CACHE_SIZE: "268435456"
+      INFLUXDB_WAL_BUFFER_SIZE: "100000"
+      INFLUXDB_WAL_FLUSH_INTERVAL: "60s"
+      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "33554432"
+      INFLUXDB_QUERY_MEMORY_BYTES: "268435456"
+      INFLUXDB_MAX_CONCURRENT_QUERIES: "4"
+      INFLUXDB_WRITE_BUFFER_SIZE: "134217728"
     volumes:
       - influxdb-data:/var/lib/influxdb
       - ./run:/run
-      # Mount tmpfs for WAL directory (critical for performance)
       - type: tmpfs
         target: /var/lib/influxdb/wal
         tmpfs:
-          # tmpfs for WAL; keep moderate size for 4GB host
-          size: 536870912  # 512MB
+          size: 1073741824
     ulimits:
       nofile:
         soft: 131072
@@ -45,10 +41,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4G  # Target constrained host; raise if host allows
+          memory: 6G
           cpus: '2'
         reservations:
-          memory: 3G
+          memory: 4G
           cpus: '1'
     networks:
       - public

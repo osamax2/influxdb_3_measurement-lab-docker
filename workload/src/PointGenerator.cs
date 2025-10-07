@@ -8,7 +8,10 @@ namespace Workload;
 public static class PointGenerator
 {
     private static readonly ThreadLocal<Random> _rand = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
-    private static readonly ThreadLocal<StringBuilder> _stringBuilder = new ThreadLocal<StringBuilder>(() => new StringBuilder(256));
+    // Do not reuse a ThreadLocal<StringBuilder> across an async iterator's
+    // suspension/resumption points. Create a fresh local StringBuilder in the
+    // generator to avoid occasional ArgumentOutOfRangeException from
+    // StringBuilder.ToString() when execution hops threads.
 
     public static IEnumerable<string> Generate(
         string[] measurements,
@@ -71,25 +74,24 @@ public static class PointGenerator
                 ? nsBase
                 : nsBase + (i % tsSpanSec) * 1_000_000_000L;
             
-            double val = _rand.Value.NextDouble() * 100.0;
+            double val = _rand.Value!.NextDouble() * 100.0;
             string valStr = val.ToString("F6", CultureInfo.InvariantCulture);
 
-            // Reuse StringBuilder for each measurement
-            var sb = _stringBuilder.Value;
-            sb.Clear();
-            
-            foreach (var measurement in measurementStrings)
-            {
-                sb.Append(measurement)
-                  .Append(tagString)
-                  .Append(" value=")
-                  .Append(valStr)
-                  .Append(' ')
-                  .Append(ns);
-                
-                yield return sb.ToString();
-                sb.Clear();
-            }
+                        foreach (var measurement in measurementStrings)
+                        {
+                                // Use a local StringBuilder per yielded value. This is cheap and
+                                // avoids subtle threading issues when the iterator resumes on
+                                // a different thread.
+                                var sb = new StringBuilder(256);
+                                sb.Append(measurement)
+                                    .Append(tagString)
+                                    .Append(" value=")
+                                    .Append(valStr)
+                                    .Append(' ')
+                                    .Append(ns);
+
+                                yield return sb.ToString();
+                        }
         }
     }
 

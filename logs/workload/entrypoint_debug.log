@@ -1,22 +1,22 @@
-[entrypoint.sh] Starting Workload container at Mon Sep 29 23:31:17 UTC 2025
--rw-r--r-- 1 worker worker 45568 Sep 29 23:31 /app/Workload.dll
-[entrypoint.sh] Valid DURATION_SEC: 10
-[entrypoint.sh] Valid BATCH_SIZE: 50000
+[entrypoint.sh] Starting Workload container at Tue Oct  7 06:08:45 UTC 2025
+-rw-r--r-- 1 worker worker 48128 Oct  7 06:08 /app/Workload.dll
+[entrypoint.sh] Valid DURATION_SEC: 0
+[entrypoint.sh] Valid BATCH_SIZE: 2000
 [entrypoint.sh] Valid INFLUX_PORT: 8086
-[entrypoint.sh] Valid POINTS: 10000000
+[entrypoint.sh] Valid POINTS: 200000
 [entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 0
-[entrypoint.sh] Valid PARALLEL_CLIENTS: 10
-[entrypoint.sh] Valid SERIES_MULTIPLIER: 1
+[entrypoint.sh] Valid PARALLEL_CLIENTS: 4
+[entrypoint.sh] Valid SERIES_MULTIPLIER: 50
 [entrypoint.sh] ENV VARS:
-TAGS=
-POINTS=10000000
+TAGS=site=lab,host=testnode
+POINTS=200000
 INFLUXDB_ORG=my-org
 INFLUXDB_ADMIN_PASSWORD=changeme
 INFLUXDB_BUCKET=my-bucket
 INFLUXDB_HTTP_BIND_ADDRESS=:8086
-SCENARIO=small_ordered_same_ts
+SCENARIO=large_simul_same_ts
 INFLUX_BUCKET=my-bucket
-MEASUREMENTS=cpu_temp,42,pressure,humidity
+MEASUREMENTS=cpu_temp,pressure,humidity
 TIMESTAMP_SPAN_SEC=0
 REPORT_NAME=run
 INFLUX_PORT=8086
@@ -26,12 +26,13 @@ SCENARIO_MATRIX_PATH=/app/config/scenario_matrix.yaml
 INFLUX_ORG=my-org
 INFLUXDB_ADMIN_USER=admin
 INFLUXDB_RETENTION=0
-INFLUX_TOKEN=
-PARALLEL_CLIENTS=10
+INFLUX_TOKEN={"token":"apiv3_testtoken123","name":"_admin"}
+PARALLEL_CLIENTS=4
 INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
-SERIES_MULTIPLIER=1
-BATCH_SIZE=50000
-DURATION_SEC=10
+SERIES_MULTIPLIER=50
+BATCH_SIZE=2000
+POINTS_PER_REQUEST=64
+DURATION_SEC=0
 INFLUX_HOST=influxdb
 [entrypoint.sh] Waiting for InfluxDB at http://influxdb:8086/health (up to 60 s)
 [entrypoint.sh] InfluxDB health responded: 200
@@ -40,8 +41,8 @@ INFLUX_HOST=influxdb
 [entrypoint.sh] TCP influxdb:8086 is reachable
 [entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
 [entrypoint.sh] Listing /logs/workload before workload execution:
-total 196
--rw-r--r-- 1 worker worker   1499 Sep 29 23:31 entrypoint_debug.log
--rw-r--r-- 1 worker worker 133993 Sep 29 23:29 environment_variables.log
--rw-r--r-- 1 worker worker   1348 Sep 29 23:30 run.csv
--rw-r--r-- 1 worker worker  15388 Sep 29 23:30 workload_stdout.log
+total 248
+-rw-r--r-- 1 worker worker   1576 Oct  7 06:08 entrypoint_debug.log
+-rw-r--r-- 1 worker worker 193267 Oct  7 06:03 environment_variables.log
+-rw-r--r-- 1 worker worker    440 Oct  7 06:03 run.csv
+-rw-r--r-- 1 worker worker   2780 Oct  7 06:03 workload_stdout.log

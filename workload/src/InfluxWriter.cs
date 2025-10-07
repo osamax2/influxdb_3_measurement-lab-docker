@@ -1,441 +1,448 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.IO;
 using System.IO.Compression;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
-using Serilog;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 
-namespace Workload;
-
-public sealed class InfluxWriter : IDisposable
+namespace Workload
 {
-    readonly string _bucket;
-    readonly string _org;
-    readonly int _batchSize;
-    // Use a single shared HttpClient for the process to avoid races when disposing
-    // individual clients while other threads are sending requests.
-    static readonly HttpClient _sharedHttpClient;
-    readonly string _writeUrl;
-    readonly bool _useGzip;
-    readonly Timer _flushTimer;
-    readonly int _flushIntervalMs;
-    readonly List<string> _batchBuffer = new List<string>();
-    readonly object _bufferLock = new object();
-    int _isFlushing = 0;
-    readonly int _minFlushPoints;
-    readonly int _chunkSizeBytes;
-    readonly System.Threading.SemaphoreSlim _sendSemaphore;
-    readonly string? _token;
-    // When disposing, prevent scheduling additional flushes
-    volatile bool _isDisposing = false;
-    private const string TextPlain = "text/plain";
-    long _totalPoints = 0;
-    DateTime _lastFlushTime = DateTime.UtcNow;
-
-    // Note: httpTimeoutSec removed; use process-wide shared HttpClient timeout instead.
-    public InfluxWriter(string host, int port, string org, string bucket, string? token, 
-                       int batchSize, int flushIntervalMs = 1000, bool useGzip = false, int chunkSizeBytes = 4_000_000, bool useDbOnly = false)
+    // Minimal, robust InfluxDB line-protocol writer.
+    // - Accepts lines via channel
+    // - Groups up to pointsPerRequest per HTTP POST
+    // - Optional gzip
+    public sealed class InfluxWriterOptions
     {
-        _batchSize = batchSize;
-        _bucket = bucket;
-        _org = org;
-        _useGzip = useGzip;
-        _flushIntervalMs = flushIntervalMs;
+        public string Host { get; init; } = "localhost";
+        public int Port { get; init; } = 8086;
+        public string Org { get; init; } = string.Empty;
+        public string Bucket { get; init; } = string.Empty;
+        public string? Token { get; init; }
+        public int BatchSize { get; init; } = 2000;
+        public int FlushIntervalMs { get; init; } = 1500;
+        public bool UseGzip { get; init; } = false;
+        public int ChunkSizeBytes { get; init; } = 131072;
+        public int CapacityMultiplier { get; init; } = 1;
+        public int PointsPerRequest { get; init; } = 4;
+        public bool UseV3WriteLp { get; init; } = false;
+        public string? V3Db { get; init; }
+        public bool AcceptPartial { get; init; } = true;
+        public bool NoSync { get; init; } = false;
+        public string Precision { get; init; } = "ns";
+    }
 
-        // Build base URL
-        var baseUrl = host.StartsWith("http") ? host : $"http://{host}";
-        if (!Uri.TryCreate(baseUrl, UriKind.Absolute, out var uri))
-            throw new ArgumentException($"Invalid host/URL: {host}");
-        
-        var authority = uri.GetLeftPart(UriPartial.Authority);
-        if (uri.IsDefaultPort)
+    public sealed class InfluxWriter : IDisposable
+    {
+        private readonly HttpClient _http;
+        private readonly Uri _writeUri;
+        private readonly string _token;
+        private readonly Channel<string> _channel;
+        private readonly int _pointsPerRequest;
+        private readonly bool _useGzip;
+
+        private readonly Task _consumerTask;
+    private CancellationTokenSource? _cts;
+    // Cache a resolved IP for the write host to avoid repeated DNS lookups
+    private IPAddress? _cachedAddress;
+    // Batch CSV logger
+    private StreamWriter? _batchLog;
+
+        // Convenience constructor: accept options object and delegate to the existing constructor
+        public InfluxWriter(InfluxWriterOptions opts)
+            : this(
+                opts.Host,
+                opts.Port,
+                opts.Org,
+                opts.Bucket,
+                opts.Token ?? string.Empty,
+                opts.BatchSize,
+                opts.FlushIntervalMs,
+                opts.UseGzip,
+                opts.ChunkSizeBytes,
+                opts.CapacityMultiplier,
+                opts.PointsPerRequest,
+                opts.UseV3WriteLp,
+                opts.V3Db,
+                opts.AcceptPartial,
+                opts.NoSync,
+                opts.Precision)
         {
-            var ub = new UriBuilder(uri) { Port = port };
-            authority = ub.Uri.GetLeftPart(UriPartial.Authority);
         }
 
-    // Build write URL. Two supported variants:
-    // - v3-compatible: bucket + db (compat) + org + precision
-    // - db-only: only legacy ?db= (useful when targeting management/compat ports like 8181)
-    if (useDbOnly)
-    {
-        _writeUrl = $"{authority}/api/v3/write_lp?db={Uri.EscapeDataString(_bucket)}";
-    }
-    else
-    {
-        _writeUrl = $"{authority}/api/v3/write_lp?bucket={Uri.EscapeDataString(_bucket)}&db={Uri.EscapeDataString(_bucket)}&org={Uri.EscapeDataString(_org)}&precision=nanosecond";
-    }
-
-        // Shared HttpClient is initialized in static constructor.
-        // We prefer to set Authorization per-request only when a token is provided to avoid stale header reuse across retries
-        if (!string.IsNullOrEmpty(token))
+        public InfluxWriter(
+            string host,
+            int port,
+            string org,
+            string bucket,
+            string token,
+            int batchSize,
+            int flushIntervalMs,
+            bool useGzip,
+            int chunkSizeBytes,
+            int capacityMultiplier,
+            int pointsPerRequest,
+            bool useV3WriteLp = false,
+            string? v3Db = null,
+            bool acceptPartial = true,
+            bool noSync = false,
+            string precision = "ns")
         {
-            _token = token;
-        }
+            _token = token ?? string.Empty;
+            _pointsPerRequest = Math.Max(1, pointsPerRequest);
+            _useGzip = useGzip;
 
-    // Minimum points required before timer-triggered flushes will run.
-    // Increase threshold so the timer doesn't cause many small flushes under load.
-    _minFlushPoints = Math.Max(1, _batchSize / 4);
-
-    // Chunk size for splitting payloads (bytes). Make configurable for tuning.
-    // Allow small chunk sizes for stress testing; enforce a sensible lower bound of 4KB.
-    _chunkSizeBytes = Math.Max(4_096, chunkSizeBytes);
-
-    // Set up periodic flush timer
-    _flushTimer = new Timer(FlushTimerCallback, null, flushIntervalMs, flushIntervalMs);
-        // Limit concurrent HTTP send operations per writer to avoid bursts that can overwhelm the server
-        _sendSemaphore = new System.Threading.SemaphoreSlim(2);
-    }
-
-    // Static ctor to initialize shared HttpClient once per process.
-    static InfluxWriter()
-    {
-        var handler = new SocketsHttpHandler
-        {
-            PooledConnectionLifetime = TimeSpan.FromMinutes(5),
-            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
-            MaxConnectionsPerServer = 20,
-            UseCookies = false,
-            UseProxy = false
-        };
-        handler.AllowAutoRedirect = false;
-
-        _sharedHttpClient = new HttpClient(handler)
-        {
-            Timeout = TimeSpan.FromSeconds(120)
-        };
-        _sharedHttpClient.DefaultRequestHeaders.ExpectContinue = false;
-        try { _sharedHttpClient.DefaultRequestVersion = new Version(1, 1); } catch { }
-        _sharedHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    }
-
-    public async Task WritePointsAsync(IAsyncEnumerable<string> lines)
-    {
-        await foreach (var line in lines)
-        {
-            lock (_bufferLock)
+            var handler = new SocketsHttpHandler
             {
-                _batchBuffer.Add(line);
-                _totalPoints++;
-                
-                // Flush if batch size reached
-                if (_batchBuffer.Count >= _batchSize && !_isDisposing)
+                PooledConnectionLifetime = TimeSpan.FromMinutes(10),
+                PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
+                MaxConnectionsPerServer = Math.Max(2, Environment.ProcessorCount * 2),
+            };
+
+            _http = new HttpClient(handler, disposeHandler: true)
+            {
+                Timeout = TimeSpan.FromSeconds(60)
+            };
+
+            var ub = new UriBuilder("http", host, port);
+            if (useV3WriteLp)
+            {
+                // Use the v3 write_lp endpoint. The API supports a `db` query parameter (db name),
+                // and optional flags accept_partial, no_sync and precision.
+                string dbName = string.IsNullOrEmpty(v3Db) ? bucket : v3Db;
+                var q = new List<string>();
+                if (!string.IsNullOrEmpty(dbName)) q.Add($"db={Uri.EscapeDataString(dbName)}");
+                q.Add($"accept_partial={(acceptPartial ? "true" : "false")}" );
+                q.Add($"no_sync={(noSync ? "true" : "false")}" );
+                if (!string.IsNullOrEmpty(precision))
                 {
-                    _ = Task.Run(() => FlushAsync()); // Fire and forget for async flush
+                    // Map short precision tokens to full names expected by v3 API
+                    string p = precision.Trim().ToLowerInvariant();
+                    string mapped = p switch
+                    {
+                        "ns" => "nanosecond",
+                        "nanosecond" => "nanosecond",
+                        "us" => "microsecond",
+                        "microsecond" => "microsecond",
+                        "ms" => "millisecond",
+                        "millisecond" => "millisecond",
+                        "s" => "second",
+                        "second" => "second",
+                        "auto" => "auto",
+                        _ => "auto"
+                    };
+                    q.Add($"precision={Uri.EscapeDataString(mapped)}");
                 }
-            }
-        }
-        
-        // Final flush
-        await FlushAsync();
-    }
 
-    private void FlushTimerCallback(object? _)
-    {
-        // Flush if buffer has data and it's been a while since last flush.
-        // Lock briefly to snapshot buffer size and last flush time to avoid races.
-        bool shouldFlush = false;
-        lock (_bufferLock)
-        {
-            // Only flush on timer when we have accumulated a reasonable number of points
-                if (_batchBuffer.Count >= _minFlushPoints && (DateTime.UtcNow - _lastFlushTime).TotalMilliseconds > _flushIntervalMs)
+                ub.Path = "/api/v3/write_lp";
+                ub.Query = string.Join("&", q);
+            }
+            else
             {
-                shouldFlush = true;
+                // Default to v2 write endpoint (org/bucket model)
+                ub.Path = "/api/v2/write";
+                ub.Query = $"org={Uri.EscapeDataString(org)}&bucket={Uri.EscapeDataString(bucket)}&precision=ns";
             }
-        }
+            _writeUri = ub.Uri;
 
-        if (shouldFlush)
-        {
-            // Avoid concurrent flushes and don't schedule new flushes when disposing
-            if (!_isDisposing)
+            _channel = Channel.CreateBounded<string>(new BoundedChannelOptions(batchSize * Math.Max(1, capacityMultiplier))
             {
-                _ = Task.Run(() => FlushAsync());
-            }
-        }
-    }
+                FullMode = BoundedChannelFullMode.Wait
+            });
 
-    private async Task FlushAsync()
-    {
-        // Prevent overlapping FlushAsync executions
-        if (System.Threading.Interlocked.Exchange(ref _isFlushing, 1) == 1)
-        {
-            return; // already flushing
-        }
-
-        List<string> currentBatch;
-        lock (_bufferLock)
-        {
-            if (_batchBuffer.Count == 0) return;
-            
-            currentBatch = new List<string>(_batchBuffer);
-            _batchBuffer.Clear();
-        }
-
-    var payload = string.Join('\n', currentBatch) + '\n';
-        var attempts = 0;
-        const int maxAttempts = 3;
-    // Legacy local const removed; use _chunkSizeBytes instance field instead.
-
-        while (attempts < maxAttempts)
-        {
-            attempts++;
+            _cts = new CancellationTokenSource();
+            // Initialize batch CSV logger if WORKLOAD_LOG_DIR is set
             try
             {
-                var bytes = Encoding.UTF8.GetBytes(payload);
+                var logDir = Environment.GetEnvironmentVariable("WORKLOAD_LOG_DIR") ?? "logs/workload";
+                Directory.CreateDirectory(logDir);
+                var fname = Path.Combine(logDir, $"batches_{DateTime.UtcNow:yyyyMMddTHHmmssZ}.csv");
+                _batchLog = new StreamWriter(new FileStream(fname, FileMode.Create, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
+                _batchLog.WriteLine("timestamp,points,attempts,success,http_status,latency_ms,error");
+            }
+            catch (Exception)
+            {
+                // ignore logging init failures
+            }
+            _consumerTask = Task.Run(() => ConsumerLoopAsync(_cts.Token));
+        }
 
-                if (bytes.Length <= _chunkSizeBytes)
+        // Producer: enqueue a single line
+        public ValueTask WritePointAsync(string line)
+        {
+            if (line is null) return ValueTask.CompletedTask;
+            _channel.Writer.WriteAsync(line);
+            return ValueTask.CompletedTask;
+        }
+
+        // Bulk writer: accept async enumerable of lines, enqueue them and wait for consumer to finish
+        public async Task WritePointsAsync(IAsyncEnumerable<string> lines)
+        {
+            await foreach (var line in lines.ConfigureAwait(false))
+            {
+                await _channel.Writer.WriteAsync(line).ConfigureAwait(false);
+            }
+
+            // signal completion and wait for consumer to finish flushing
+            _channel.Writer.Complete();
+            try { await _consumerTask.ConfigureAwait(false); } catch { }
+        }
+
+        // Consumer: batch lines into requests
+        private async Task ConsumerLoopAsync(CancellationToken ct)
+        {
+            var buffer = new List<string>(_pointsPerRequest);
+
+            try
+            {
+                while (await _channel.Reader.WaitToReadAsync(ct))
                 {
-                    Log.Debug("Posting single chunk bytes={Bytes}", bytes.Length);
-                    HttpContent content;
-                    string? payloadPreview = null;
-                    if (_useGzip)
+                    while (_channel.Reader.TryRead(out var line))
                     {
-                        content = CreateGzipContent(payload);
-                        payloadPreview = "<gzip>";
-                    }
-                    else
-                    {
-                        // Ensure charset is present per docs
-                        content = new StringContent(payload, Encoding.UTF8, "text/plain");
-                        content.Headers.ContentType.CharSet = "utf-8";
-                        payloadPreview = payload.Length <= 512 ? payload : payload.Substring(0, 512) + "...";
-                    }
+                        buffer.Add(line);
 
-                    var response = await SendHttpRequestAsync(content).ConfigureAwait(false);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        var body = "";
-                        try { body = await response.Content.ReadAsStringAsync().ConfigureAwait(false); } catch { /* ignore read errors of response body for logging */ }
-                        Log.Warning("Write failed to URL {Url} with status {Status} {Reason}. Body: {Body}. Request preview: {Preview}", _writeUrl, (int)response.StatusCode, response.ReasonPhrase, body, payloadPreview);
-                        response.EnsureSuccessStatusCode();
-                    }
-                    Log.Information("Successfully wrote {Count} points (Total: {Total}) in 1 chunk (bytes={Bytes})", currentBatch.Count, _totalPoints, bytes.Length);
-                }
-                else
-                {
-                    // Split by lines ensuring each chunk's UTF8 byte length <= _chunkSizeBytes
-                    var lines = payload.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                    var chunk = new List<string>();
-                    var chunkBytes = 0;
-                    var sentPoints = 0;
-
-                    foreach (var line in lines)
-                    {
-                        var lineBytes = Encoding.UTF8.GetByteCount(line + '\n');
-                        if (chunkBytes + lineBytes > _chunkSizeBytes && chunk.Count > 0)
+                        if (buffer.Count >= _pointsPerRequest)
                         {
-                            var chunkPayload = string.Join('\n', chunk) + '\n';
-                            var chunkByteLen = Encoding.UTF8.GetByteCount(chunkPayload);
-                            Log.Debug("Posting chunk bytes={Bytes} (points={Points})", chunkByteLen, chunk.Count);
-                                HttpContent content;
-                                string? chunkPreview = null;
-                                if (_useGzip)
-                                {
-                                    content = CreateGzipContent(chunkPayload);
-                                    chunkPreview = "<gzip>";
-                                }
-                                else
-                                {
-                                    content = new StringContent(chunkPayload, Encoding.UTF8, "text/plain");
-                                    content.Headers.ContentType.CharSet = "utf-8";
-                                    chunkPreview = chunkPayload.Length <= 512 ? chunkPayload : chunkPayload.Substring(0, 512) + "...";
-                                }
-
-                                // small randomized backoff to avoid synchronized spikes across many clients
-                                await Task.Delay(TimeSpan.FromMilliseconds(25 + Random.Shared.Next(75)));
-                                await TrySendWithDiagnostics(content, chunkPreview, chunkPayload).ConfigureAwait(false);
-                            sentPoints += chunk.Count;
-                            Log.Information("Successfully wrote {Count} points (Total: {Total}) in chunk (bytes={Bytes})", chunk.Count, _totalPoints, chunkBytes);
-                            chunk.Clear();
-                            chunkBytes = 0;
+                            await PostBatchAsync(buffer, ct).ConfigureAwait(false);
+                            buffer.Clear();
                         }
-
-                        chunk.Add(line);
-                        chunkBytes += lineBytes;
-                    }
-
-                    if (chunk.Count > 0)
-                    {
-                        var chunkPayload = string.Join('\n', chunk) + '\n';
-                        var finalChunkByteLen = Encoding.UTF8.GetByteCount(chunkPayload);
-                        Log.Debug("Posting final chunk bytes={Bytes} (points={Points})", finalChunkByteLen, chunk.Count);
-                            HttpContent content;
-                            string? finalPreview = null;
-                            if (_useGzip)
-                            {
-                                content = CreateGzipContent(chunkPayload);
-                                finalPreview = "<gzip>";
-                            }
-                            else
-                            {
-                                content = new StringContent(chunkPayload, Encoding.UTF8, "text/plain");
-                                content.Headers.ContentType.CharSet = "utf-8";
-                                finalPreview = chunkPayload.Length <= 512 ? chunkPayload : chunkPayload.Substring(0, 512) + "...";
-                            }
-
-                            await Task.Delay(TimeSpan.FromMilliseconds(25 + Random.Shared.Next(75)));
-                            await TrySendWithDiagnostics(content, finalPreview, chunkPayload).ConfigureAwait(false);
-                        sentPoints += chunk.Count;
-                        Log.Information("Successfully wrote {Count} points (Total: {Total}) in final chunk (bytes={Bytes})", chunk.Count, _totalPoints, chunkBytes);
-                    }
-
-                    if (sentPoints != currentBatch.Count)
-                    {
-                        Log.Warning("Sent points ({Sent}) != batch size ({Batch})", sentPoints, currentBatch.Count);
                     }
                 }
 
-                _lastFlushTime = DateTime.UtcNow;
-        break;
+                if (buffer.Count > 0)
+                {
+                    await PostBatchAsync(buffer, ct).ConfigureAwait(false);
+                    buffer.Clear();
+                }
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Write attempt {Attempt} failed", attempts);
-                if (attempts >= maxAttempts)
-                {
-                    Log.Error("All write attempts failed for batch of {Count} points", currentBatch.Count);
-                    throw;
-                }
-
-                await Task.Delay(TimeSpan.FromMilliseconds(200 * attempts));
+                // best-effort: write to stderr so container logs capture it
+                try { Console.Error.WriteLine($"Consumer loop failed: {ex}"); } catch { }
             }
         }
 
-    // Allow subsequent flushes
-    System.Threading.Interlocked.Exchange(ref _isFlushing, 0);
-    }
-
-    private static HttpContent CreateGzipContent(string payload)
-    {
-        var bytes = Encoding.UTF8.GetBytes(payload);
-        using var output = new System.IO.MemoryStream();
-        using (var gzip = new GZipStream(output, CompressionLevel.Fastest))
+        private async Task PostBatchAsync(List<string> lines, CancellationToken ct)
         {
-            gzip.Write(bytes, 0, bytes.Length);
-        }
-        
-        var content = new ByteArrayContent(output.ToArray());
-        content.Headers.ContentType = new MediaTypeHeaderValue(TextPlain);
-        content.Headers.ContentType.CharSet = "utf-8";
-        content.Headers.ContentEncoding.Add("gzip");
-        return content;
-    }
+            var payload = string.Join('\n', lines) + '\n';
 
-    private async Task<HttpResponseMessage> SendHttpRequestAsync(HttpContent content)
-    {
-        await _sendSemaphore.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            using var req = new HttpRequestMessage(HttpMethod.Post, _writeUrl)
+            // Prepare payload bytes once (either compressed or raw). We'll recreate HttpContent per attempt
+            byte[] payloadBytes;
+            bool isGzip = false;
+
+            if (_useGzip)
             {
-                Content = content,
-                Version = new Version(1, 1)
-            };
-
-            // Add per-request Authorization header to avoid issues with reused default headers across retries
-            if (!string.IsNullOrEmpty(_token))
-            {
-                req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            }
-
-            // Rely on connection pooling; do not force Connection: close which can increase connection churn
-            return await _sharedHttpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-        }
-        finally
-        {
-            _sendSemaphore.Release();
-        }
-    }
-
-    // Diagnostic helper: try to send content; if server returns 400, and content is plain text with multiple lines,
-    // split and send lines individually to find the exact offending line causing Bad Request.
-    private async Task TrySendWithDiagnostics(HttpContent content, string preview, string fullPayload)
-    {
-        var response = await SendHttpRequestAsync(content).ConfigureAwait(false);
-        if (response.IsSuccessStatusCode) return;
-
-        var status = (int)response.StatusCode;
-        var reason = response.ReasonPhrase;
-        var body = "";
-        try { body = await response.Content.ReadAsStringAsync().ConfigureAwait(false); } catch { /* ignore */ }
-
-        Log.Warning("Write failed to URL {Url} with status {Status} {Reason}. Body: {Body}. Request preview: {Preview}", _writeUrl, status, reason, body, preview);
-
-        // If payload looks like plain text (not gzip) and contains multiple lines, try to isolate the bad line.
-        if (fullPayload != null && !fullPayload.StartsWith("<gzip>") && fullPayload.Contains('\n'))
-        {
-            var lines = fullPayload.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < lines.Length; i++)
-            {
-                var line = lines[i];
                 try
                 {
-                    using var singleContent = new StringContent(line + "\n", Encoding.UTF8, "text/plain");
-                    singleContent.Headers.ContentType.CharSet = "utf-8";
-                    var r2 = await SendHttpRequestAsync(singleContent).ConfigureAwait(false);
-                    if (!r2.IsSuccessStatusCode)
+                    var raw = Encoding.UTF8.GetBytes(payload);
+                    using (var ms = new MemoryStream())
                     {
-                        var b2 = "";
-                        try { b2 = await r2.Content.ReadAsStringAsync().ConfigureAwait(false); } catch { }
-                        Log.Error("Diagnostic: single-line write failed at index {Idx} status={Status} reason={Reason} body={Body} preview={Preview}", i, (int)r2.StatusCode, r2.ReasonPhrase, b2, (line.Length <= 256 ? line : line.Substring(0, 256) + "..."));
-                        // stop after first failing line
+                        using (var gz = new GZipStream(ms, CompressionLevel.Fastest, leaveOpen: false))
+                        {
+                            gz.Write(raw, 0, raw.Length);
+                        }
+                        payloadBytes = ms.ToArray();
+                    }
+                    isGzip = true;
+                }
+                catch (Exception ex)
+                {
+                    try { Console.Error.WriteLine($"Gzip compression failed, sending uncompressed: {ex}"); } catch { }
+                    payloadBytes = Encoding.UTF8.GetBytes(payload);
+                    isGzip = false;
+                }
+            }
+            else
+            {
+                payloadBytes = Encoding.UTF8.GetBytes(payload);
+            }
+
+            int maxRetries = 3;
+            var rand = new Random();
+
+            int attemptsMade = 0;
+            bool success = false;
+            int httpStatus = 0;
+            string errorMsg = string.Empty;
+            long latencyMs = 0;
+
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    attemptsMade = attempt;
+                    break;
+                }
+                // Before attempting network I/O, ensure the host name resolves to an IP.
+                // If DNS fails, wait/backoff and retry so transient DNS hiccups (Docker DNS flaps)
+                // don't immediately produce noisy stack traces.
+                bool resolvable = await EnsureHostResolvableAsync(ct).ConfigureAwait(false);
+                if (!resolvable)
+                {
+                    try { Console.Error.WriteLine($"Host name resolution failed for {_writeUri.Host}, backing off and will retry (attempt={attempt})"); } catch { }
+                    // perform backoff and skip attempting the HTTP request this iteration
+                    int dnsBackoffMs = (int)(100 * Math.Pow(2, attempt));
+                    dnsBackoffMs += new Random().Next(0, 100);
+                    try { await Task.Delay(dnsBackoffMs, ct).ConfigureAwait(false); } catch (OperationCanceledException) { return; }
+                    continue;
+                }
+
+                HttpContent content = new ByteArrayContent(payloadBytes);
+                try
+                {
+                    if (isGzip) content.Headers.ContentEncoding.Add("gzip");
+                    content.Headers.ContentType = new MediaTypeHeaderValue("text/plain") { CharSet = "utf-8" };
+
+                    // If we have a cached address, construct a request URI using that IP and
+                    // preserve the original Host header so virtual-hosting on the server still works.
+                    Uri targetUri = _writeUri;
+                    if (_cachedAddress != null)
+                    {
+                        var ub = new UriBuilder(_writeUri)
+                        {
+                            Host = _cachedAddress.ToString()
+                        };
+                        targetUri = ub.Uri;
+                    }
+
+                    using var req = new HttpRequestMessage(HttpMethod.Post, targetUri) { Content = content };
+                    if (!string.IsNullOrEmpty(_token))
+                        req.Headers.Authorization = new AuthenticationHeaderValue("Token", _token);
+                    // set Host header to original host so server sees expected Host value
+                    if (!string.IsNullOrEmpty(_writeUri.Host)) req.Headers.Host = _writeUri.Host;
+
+                    HttpResponseMessage resp;
+                    try
+                    {
+                        var sw = System.Diagnostics.Stopwatch.StartNew();
+                        resp = await _http.SendAsync(req, ct).ConfigureAwait(false);
+                        sw.Stop();
+                        latencyMs = sw.ElapsedMilliseconds;
+                        attemptsMade = attempt + 1;
+                    }
+                    catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                    {
+                        attemptsMade = attempt + 1;
+                        break; // cancelled
+                    }
+
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        // success
+                        success = true;
+                        httpStatus = (int)resp.StatusCode;
+                        // log after loop
+                        break;
+                    }
+
+                    // not success - read body for diagnostics
+                    string body = string.Empty;
+                    try { body = await resp.Content.ReadAsStringAsync().ConfigureAwait(false); } catch (Exception ex) { body = ex.Message; }
+
+                    int status = (int)resp.StatusCode;
+                    // Retry for server errors (5xx), otherwise log and break
+                    if (status >= 500 && attempt < maxRetries - 1)
+                    {
+                        try { Console.Error.WriteLine($"Transient server error, will retry: status={status}; points={lines.Count}; attempt={attempt}"); } catch { }
+                    }
+                    else
+                    {
+                        try { Console.Error.WriteLine($"Failed to post batch: status={status}; points={lines.Count}; url={_writeUri}; body={body}"); } catch { }
+                        httpStatus = status;
+                        errorMsg = body ?? string.Empty;
+                        attemptsMade = attempt + 1;
+                        break;
+                    }
+                }
+                catch (HttpRequestException hre)
+                {
+                    // Network-level errors - retryable
+                    if (attempt < maxRetries - 1)
+                    {
+                        try { Console.Error.WriteLine($"Failed to post batch exception (network), will retry: {hre.Message}; attempt={attempt}"); } catch { }
+                    }
+                    else
+                    {
+                        try { Console.Error.WriteLine($"Failed to post batch exception: {hre}"); } catch { }
+                        errorMsg = hre.Message;
+                        attemptsMade = attempt + 1;
                         break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Diagnostic send failed for line index {Idx}", i);
+                    // Other errors: log and don't retry
+                    try { Console.Error.WriteLine($"Failed to post batch exception: {ex}"); } catch { }
+                    errorMsg = ex.Message;
+                    attemptsMade = attempt + 1;
+                    break;
                 }
+                finally
+                {
+                    // content will be disposed by HttpRequestMessage / using var req scope
+                }
+
+                // backoff before next attempt (exponential with jitter)
+                int backoffMsNext = (int)(100 * Math.Pow(2, attempt)); // 100ms, 200ms, 400ms ...
+                // apply small random jitter up to +100ms
+                backoffMsNext += rand.Next(0, 100);
+                try { await Task.Delay(backoffMsNext, ct).ConfigureAwait(false); } catch (OperationCanceledException) { break; }
             }
-        }
 
-        response.EnsureSuccessStatusCode();
-    }
-
-    public void Dispose()
-    {
-        // Signal disposing so no new flushes are scheduled
-        _isDisposing = true;
-
-        // Stop the timer first so no new timer callbacks run while we're flushing.
-        _flushTimer?.Dispose();
-
-        // Wait for any in-flight flush to complete (with a longer timeout).
-        // This prevents disposing the HttpClient while a background flush is using it.
-        var waited = 0;
-        const int waitSliceMs = 100;
-        const int maxWaitMs = 30_000; // up to 30s wait for flushes to finish
-        while (System.Threading.Interlocked.CompareExchange(ref _isFlushing, 0, 0) == 1 && waited < maxWaitMs)
-        {
-            System.Threading.Thread.Sleep(waitSliceMs);
-            waited += waitSliceMs;
-        }
-
-        // Final flush of any remaining points. Do this before disposing the HttpClient
-        // because FlushAsync uses the shared HttpClient instance. Lock buffer when checking.
-        lock (_bufferLock)
-        {
-            if (_batchBuffer.Count > 0)
+            // Write instrumentation line for this batch
+            try
             {
-                try
+                if (_batchLog != null)
                 {
-                    // Run synchronously to ensure flush completes before we continue
-                    Task.Run(() => FlushAsync()).GetAwaiter().GetResult();
-                }
-                catch (Exception ex)
-                {
-                    // Log and swallow exceptions during dispose so callers can continue shutdown.
-                    Log.Warning(ex, "Final flush during Dispose failed");
+                    var ts = DateTime.UtcNow.ToString("o");
+                    var line = $"{ts},{lines.Count},{attemptsMade},{(success?1:0)},{httpStatus},{latencyMs},\"{errorMsg.Replace('"','\'')}\"";
+                    _batchLog.WriteLine(line);
                 }
             }
+            catch { }
         }
 
-        // Do NOT dispose the HttpClient here. Disposing HttpClient while other threads
-        // (or the runtime) may still use underlying handlers can cause ObjectDisposedException
-        // when concurrent SendAsync calls are racing with disposal. Let the runtime dispose
-        // process exit clean up sockets, or refactor to share a single HttpClient across writers.
+        public void Dispose()
+        {
+            try
+            {
+                _cts?.Cancel();
+            }
+            catch { }
+
+            _cts?.Dispose();
+            try { _batchLog?.Flush(); _batchLog?.Dispose(); } catch { }
+            _http?.Dispose();
+        }
+
+        // Try to resolve the configured host. Returns true if resolution succeeded.
+        private async Task<bool> EnsureHostResolvableAsync(CancellationToken ct)
+        {
+            try
+            {
+                // Use DNS to resolve the host name to IP addresses.
+                var host = _writeUri.Host;
+                if (string.IsNullOrEmpty(host)) return false;
+                IPAddress[] addrs = await Dns.GetHostAddressesAsync(host).ConfigureAwait(false);
+                return addrs != null && addrs.Length > 0;
+            }
+            catch (Exception ex) when (ex is SocketException || ex is System.Net.Sockets.SocketException || ex is System.ArgumentException || ex is TaskCanceledException)
+            {
+                // treat resolution failures as transient
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
