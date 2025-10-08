@@ -1,0 +1,81 @@
+[08:10:08 INF] START 2025-10-08T08:10:08.5810119Z
+[ENV] APP_UID=1654
+[ENV] ASPNETCORE_HTTP_PORTS=8080
+[ENV] BATCH_SIZE=1000
+[ENV] CHUNK_SIZE_BYTES=131072
+[ENV] DOTNET_RUNNING_IN_CONTAINER=true
+[ENV] DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+[ENV] DOTNET_VERSION=8.0.20
+[ENV] DURATION_SEC=0
+[ENV] FLUSH_INTERVAL_MS=1500
+[ENV] HOME=/home/worker
+[ENV] HOSTNAME=b8586bd4c876
+[ENV] INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
+[ENV] INFLUXDB_ADMIN_PASSWORD=changeme
+[ENV] INFLUXDB_ADMIN_USER=admin
+[ENV] INFLUXDB_BUCKET=my-bucket
+[ENV] INFLUXDB_HTTP_BIND_ADDRESS=:8086
+[ENV] INFLUXDB_ORG=my-org
+[ENV] INFLUXDB_RETENTION=0
+[ENV] INFLUX_BASE_IMAGE=influxdb:3-core
+[ENV] INFLUX_BUCKET=my-bucket
+[ENV] INFLUX_HOST=influxdb
+[ENV] INFLUX_ORG=my-org
+[ENV] INFLUX_PORT=8086
+[ENV] INFLUX_TOKEN={"token":"apiv3_testtoken123","name":"_admin"}
+[ENV] MEASUREMENTS=cpu_temp,pressure,humidity
+[ENV] PARALLEL_CLIENTS=4
+[ENV] PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ENV] POINTS=200000
+[ENV] POINTS_PER_REQUEST=250
+[ENV] PWD=/app
+[ENV] REPORT_NAME=run
+[ENV] SCENARIO=large_simul_same_ts
+[ENV] SCENARIO_MATRIX_PATH=/app/config/scenario_matrix.yaml
+[ENV] SEND_CONCURRENCY=4
+[ENV] SERIES_MULTIPLIER=50
+[ENV] SHLVL=0
+[ENV] TAGS=site=lab,host=testnode
+[ENV] TIMESTAMP_SPAN_SEC=0
+[ENV] USE_GZIP=true
+[ENV] WORKLOAD_LOG_DIR=/logs/workload
+[CONFIG] Extracted token from INFLUX_TOKEN env JSON
+[RunLogger] Creating log file: /logs/workload/run.csv
+[RunLogger] Writing header
+[RunLogger] Header written and flushed
+[RunLogger] Log file stream opened: System.IO.FileStream
+[RunLogger] Event: 2025-10-08T08:10:08.8125694+00:00,SCENARIO_START,large_simul_same_ts
+[RunLogger] Flushed event: SCENARIO_START
+[RunLogger] Event: 2025-10-08T08:10:08.8130743+00:00,PARAMS,points=200000;ts_span=0;pc=4;series_mult=50
+[RunLogger] Flushed event: PARAMS
+[CONFIG] Total Points: 200000
+[CONFIG] Parallel Clients: 4
+[CONFIG] Batch Size: 1000
+[RunLogger] Event: 2025-10-08T08:10:08.8186929+00:00,THREAD_0_START,50000
+[RunLogger] Flushed event: THREAD_0_START
+[THREAD 0] Processing 50000 points
+[RunLogger] Event: 2025-10-08T08:10:08.8188516+00:00,THREAD_1_START,50000
+[RunLogger] Flushed event: THREAD_1_START
+[THREAD 1] Processing 50000 points
+[RunLogger] Event: 2025-10-08T08:10:08.8189591+00:00,THREAD_2_START,50000
+[RunLogger] Flushed event: THREAD_2_START
+[THREAD 2] Processing 50000 points
+[RunLogger] Event: 2025-10-08T08:10:08.8190477+00:00,THREAD_3_START,50000
+[RunLogger] Flushed event: THREAD_3_START
+[THREAD 3] Processing 50000 points
+[RunLogger] Event: 2025-10-08T08:10:09.1364340+00:00,THREAD_0_END,SUCCESS
+[RunLogger] Flushed event: THREAD_0_END
+[THREAD 0] Completed successfully
+[RunLogger] Event: 2025-10-08T08:10:09.1528010+00:00,THREAD_1_END,SUCCESS
+[RunLogger] Flushed event: THREAD_1_END
+[THREAD 1] Completed successfully
+[RunLogger] Event: 2025-10-08T08:10:09.2258336+00:00,THREAD_2_END,SUCCESS
+[RunLogger] Flushed event: THREAD_2_END
+[THREAD 2] Completed successfully
+[RunLogger] Event: 2025-10-08T08:10:09.2820245+00:00,THREAD_3_END,SUCCESS
+[RunLogger] Flushed event: THREAD_3_END
+[THREAD 3] Completed successfully
+[RunLogger] Event: 2025-10-08T08:10:09.2875692+00:00,SCENARIO_END,SUCCESS
+[RunLogger] Flushed event: SCENARIO_END
+[RunLogger] Disposing logger and flushing file
+[08:10:09 INF] END 2025-10-08T08:10:09.2880608Z

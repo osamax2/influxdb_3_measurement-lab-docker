@@ -1,0 +1,212 @@
+time="2025-10-08T10:13:37+03:00" level=warning msg="/Users/osamaalabaji/influxdb_3_measurement-lab-docker/docker-compose.tuned.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.25kB done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.24kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for mcr.microsoft.com/dotnet/sdk:8.0
+#3 DONE 2.0s
+
+#4 [internal] load metadata for mcr.microsoft.com/dotnet/runtime:8.0
+#4 DONE 2.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 1/7] FROM mcr.microsoft.com/dotnet/sdk:8.0@sha256:ff8311847c54c04d1a14c488362807997d59b61372da5095a95f89cbcda7f9b7
+#6 resolve mcr.microsoft.com/dotnet/sdk:8.0@sha256:ff8311847c54c04d1a14c488362807997d59b61372da5095a95f89cbcda7f9b7 0.0s done
+#6 DONE 0.0s
+
+#7 [build 2/7] WORKDIR /src
+#7 CACHED
+
+#8 [stage-1 1/9] FROM mcr.microsoft.com/dotnet/runtime:8.0@sha256:e9aabde56bb3e55d416d4e926032af75fed831da70bb428d556120ee2649f8b0
+#8 resolve mcr.microsoft.com/dotnet/runtime:8.0@sha256:e9aabde56bb3e55d416d4e926032af75fed831da70bb428d556120ee2649f8b0 done
+#8 DONE 0.0s
+
+#9 [stage-1 2/9] WORKDIR /app
+#9 CACHED
+
+#10 [internal] load build context
+#10 transferring context: 359B done
+#10 DONE 0.0s
+
+#11 [build 3/7] COPY Workload.csproj ./
+#11 DONE 0.0s
+
+#12 [stage-1 3/9] RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/*
+#12 0.657 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#12 1.752 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#12 2.277 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+#12 2.918 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8693 kB]
+#12 ...
+
+#13 [build 4/7] RUN dotnet restore
+#13 0.459   Determining projects to restore...
+#13 ...
+
+#12 [stage-1 3/9] RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/*
+#12 14.90 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+#12 15.31 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [276 kB]
+#12 15.74 Fetched 9230 kB in 16s (592 kB/s)
+#12 15.74 Reading package lists...
+#12 16.05 Reading package lists...
+#12 16.32 Building dependency tree...
+#12 16.38 Reading state information...
+#12 16.46 ca-certificates is already the newest version (20230311+deb12u1).
+#12 16.46 The following additional packages will be installed:
+#12 16.46   libbrotli1 libcurl4 libgssapi-krb5-2 libk5crypto3 libkeyutils1 libkrb5-3
+#12 16.46   libkrb5support0 libldap-2.5-0 libnghttp2-14 libpsl5 librtmp1 libsasl2-2
+#12 16.46   libsasl2-modules-db libssh2-1
+#12 16.46 Suggested packages:
+#12 16.46   krb5-doc krb5-user
+#12 16.46 Recommended packages:
+#12 16.46   krb5-locales libldap-common publicsuffix libsasl2-modules
+#12 16.55 The following NEW packages will be installed:
+#12 16.55   curl libbrotli1 libcurl4 libgssapi-krb5-2 libk5crypto3 libkeyutils1
+#12 16.55   libkrb5-3 libkrb5support0 libldap-2.5-0 libnghttp2-14 libpsl5 librtmp1
+#12 16.55   libsasl2-2 libsasl2-modules-db libssh2-1
+#12 17.87 0 upgraded, 15 newly installed, 0 to remove and 2 not upgraded.
+#12 17.87 Need to get 2113 kB of archives.
+#12 17.87 After this operation, 6177 kB of additional disk space will be used.
+#12 17.87 Get:1 http://deb.debian.org/debian bookworm/main arm64 libbrotli1 arm64 1.0.9-2+b6 [269 kB]
+#12 18.51 Get:2 http://deb.debian.org/debian bookworm/main arm64 libkrb5support0 arm64 1.20.1-2+deb12u4 [32.5 kB]
+#12 18.53 Get:3 http://deb.debian.org/debian bookworm/main arm64 libk5crypto3 arm64 1.20.1-2+deb12u4 [80.2 kB]
+#12 18.58 Get:4 http://deb.debian.org/debian bookworm/main arm64 libkeyutils1 arm64 1.6.3-2 [8844 B]
+#12 18.58 Get:5 http://deb.debian.org/debian bookworm/main arm64 libkrb5-3 arm64 1.20.1-2+deb12u4 [314 kB]
+#12 18.89 Get:6 http://deb.debian.org/debian bookworm/main arm64 libgssapi-krb5-2 arm64 1.20.1-2+deb12u4 [124 kB]
+#12 19.02 Get:7 http://deb.debian.org/debian bookworm/main arm64 libsasl2-modules-db arm64 2.1.28+dfsg-10 [20.8 kB]
+#12 19.06 Get:8 http://deb.debian.org/debian bookworm/main arm64 libsasl2-2 arm64 2.1.28+dfsg-10 [58.0 kB]
+#12 19.11 Get:9 http://deb.debian.org/debian bookworm/main arm64 libldap-2.5-0 arm64 2.5.13+dfsg-5 [171 kB]
+#12 19.41 Get:10 http://deb.debian.org/debian bookworm/main arm64 libnghttp2-14 arm64 1.52.0-1+deb12u2 [68.6 kB]
+#12 19.53 Get:11 http://deb.debian.org/debian bookworm/main arm64 libpsl5 arm64 0.21.2-1 [58.6 kB]
+#12 19.67 Get:12 http://deb.debian.org/debian bookworm/main arm64 librtmp1 arm64 2.4+20151223.gitfa8646d.1-2+b2 [59.4 kB]
+#12 20.15 Get:13 http://deb.debian.org/debian bookworm/main arm64 libssh2-1 arm64 1.10.0-3+b1 [172 kB]
+#12 20.70 Get:14 http://deb.debian.org/debian bookworm/main arm64 libcurl4 arm64 7.88.1-10+deb12u14 [367 kB]
+#12 21.56 Get:15 http://deb.debian.org/debian bookworm/main arm64 curl arm64 7.88.1-10+deb12u14 [309 kB]
+#12 22.13 debconf: delaying package configuration, since apt-utils is not installed
+#12 22.14 Fetched 2113 kB in 5s (389 kB/s)
+#12 22.17 Selecting previously unselected package libbrotli1:arm64.
+#12 22.17 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6594 files and directories currently installed.)
+#12 22.18 Preparing to unpack .../00-libbrotli1_1.0.9-2+b6_arm64.deb ...
+#12 22.19 Unpacking libbrotli1:arm64 (1.0.9-2+b6) ...
+#12 22.26 Selecting previously unselected package libkrb5support0:arm64.
+#12 22.26 Preparing to unpack .../01-libkrb5support0_1.20.1-2+deb12u4_arm64.deb ...
+#12 22.27 Unpacking libkrb5support0:arm64 (1.20.1-2+deb12u4) ...
+#12 22.31 Selecting previously unselected package libk5crypto3:arm64.
+#12 22.31 Preparing to unpack .../02-libk5crypto3_1.20.1-2+deb12u4_arm64.deb ...
+#12 22.31 Unpacking libk5crypto3:arm64 (1.20.1-2+deb12u4) ...
+#12 22.35 Selecting previously unselected package libkeyutils1:arm64.
+#12 22.35 Preparing to unpack .../03-libkeyutils1_1.6.3-2_arm64.deb ...
+#12 22.36 Unpacking libkeyutils1:arm64 (1.6.3-2) ...
+#12 22.39 Selecting previously unselected package libkrb5-3:arm64.
+#12 22.39 Preparing to unpack .../04-libkrb5-3_1.20.1-2+deb12u4_arm64.deb ...
+#12 22.46 Unpacking libkrb5-3:arm64 (1.20.1-2+deb12u4) ...
+#12 22.52 Selecting previously unselected package libgssapi-krb5-2:arm64.
+#12 22.52 Preparing to unpack .../05-libgssapi-krb5-2_1.20.1-2+deb12u4_arm64.deb ...
+#12 22.53 Unpacking libgssapi-krb5-2:arm64 (1.20.1-2+deb12u4) ...
+#12 22.56 Selecting previously unselected package libsasl2-modules-db:arm64.
+#12 22.56 Preparing to unpack .../06-libsasl2-modules-db_2.1.28+dfsg-10_arm64.deb ...
+#12 22.57 Unpacking libsasl2-modules-db:arm64 (2.1.28+dfsg-10) ...
+#12 22.60 Selecting previously unselected package libsasl2-2:arm64.
+#12 22.60 Preparing to unpack .../07-libsasl2-2_2.1.28+dfsg-10_arm64.deb ...
+#12 22.61 Unpacking libsasl2-2:arm64 (2.1.28+dfsg-10) ...
+#12 22.62 Selecting previously unselected package libldap-2.5-0:arm64.
+#12 22.63 Preparing to unpack .../08-libldap-2.5-0_2.5.13+dfsg-5_arm64.deb ...
+#12 22.63 Unpacking libldap-2.5-0:arm64 (2.5.13+dfsg-5) ...
+#12 22.66 Selecting previously unselected package libnghttp2-14:arm64.
+#12 22.66 Preparing to unpack .../09-libnghttp2-14_1.52.0-1+deb12u2_arm64.deb ...
+#12 22.66 Unpacking libnghttp2-14:arm64 (1.52.0-1+deb12u2) ...
+#12 22.68 Selecting previously unselected package libpsl5:arm64.
+#12 22.68 Preparing to unpack .../10-libpsl5_0.21.2-1_arm64.deb ...
+#12 22.69 Unpacking libpsl5:arm64 (0.21.2-1) ...
+#12 22.71 Selecting previously unselected package librtmp1:arm64.
+#12 22.71 Preparing to unpack .../11-librtmp1_2.4+20151223.gitfa8646d.1-2+b2_arm64.deb ...
+#12 22.71 Unpacking librtmp1:arm64 (2.4+20151223.gitfa8646d.1-2+b2) ...
+#12 22.74 Selecting previously unselected package libssh2-1:arm64.
+#12 22.74 Preparing to unpack .../12-libssh2-1_1.10.0-3+b1_arm64.deb ...
+#12 22.74 Unpacking libssh2-1:arm64 (1.10.0-3+b1) ...
+#12 22.78 Selecting previously unselected package libcurl4:arm64.
+#12 22.78 Preparing to unpack .../13-libcurl4_7.88.1-10+deb12u14_arm64.deb ...
+#12 22.79 Unpacking libcurl4:arm64 (7.88.1-10+deb12u14) ...
+#12 22.84 Selecting previously unselected package curl.
+#12 22.84 Preparing to unpack .../14-curl_7.88.1-10+deb12u14_arm64.deb ...
+#12 22.85 Unpacking curl (7.88.1-10+deb12u14) ...
+#12 22.90 Setting up libkeyutils1:arm64 (1.6.3-2) ...
+#12 22.92 Setting up libpsl5:arm64 (0.21.2-1) ...
+#12 22.94 Setting up libbrotli1:arm64 (1.0.9-2+b6) ...
+#12 22.95 Setting up libnghttp2-14:arm64 (1.52.0-1+deb12u2) ...
+#12 22.97 Setting up libkrb5support0:arm64 (1.20.1-2+deb12u4) ...
+#12 22.99 Setting up libsasl2-modules-db:arm64 (2.1.28+dfsg-10) ...
+#12 23.00 Setting up librtmp1:arm64 (2.4+20151223.gitfa8646d.1-2+b2) ...
+#12 23.02 Setting up libk5crypto3:arm64 (1.20.1-2+deb12u4) ...
+#12 23.04 Setting up libsasl2-2:arm64 (2.1.28+dfsg-10) ...
+#12 23.05 Setting up libssh2-1:arm64 (1.10.0-3+b1) ...
+#12 23.06 Setting up libkrb5-3:arm64 (1.20.1-2+deb12u4) ...
+#12 23.08 Setting up libldap-2.5-0:arm64 (2.5.13+dfsg-5) ...
+#12 23.13 Setting up libgssapi-krb5-2:arm64 (1.20.1-2+deb12u4) ...
+#12 23.15 Setting up libcurl4:arm64 (7.88.1-10+deb12u14) ...
+#12 23.17 Setting up curl (7.88.1-10+deb12u14) ...
+#12 23.18 Processing triggers for libc-bin (2.36-9+deb12u13) ...
+#12 DONE 23.3s
+
+#13 [build 4/7] RUN dotnet restore
+#13 ...
+
+#14 [stage-1 4/9] RUN mkdir -p /app/config
+#14 DONE 0.2s
+
+#13 [build 4/7] RUN dotnet restore
+#13 ...
+
+#15 [stage-1 5/9] RUN groupadd -g 1000 worker &&     useradd -u 1000 -g 1000 -m worker &&     mkdir -p /logs/workload &&     chown worker:worker /logs/workload
+#15 DONE 0.2s
+
+#13 [build 4/7] RUN dotnet restore
+#13 44.04   Restored /src/Workload.csproj (in 43.36 sec).
+#13 DONE 44.2s
+
+#16 [build 5/7] COPY src/ ./src/
+#16 DONE 0.0s
+
+#17 [build 6/7] COPY config/ ./config/
+#17 DONE 0.0s
+
+#18 [build 7/7] RUN dotnet publish -c Release -o /app/publish
+#18 0.479   Determining projects to restore...
+#18 0.706   All projects are up-to-date for restore.
+#18 1.977   Workload -> /src/bin/Release/net8.0/Workload.dll
+#18 2.006   Workload -> /app/publish/
+#18 DONE 2.1s
+
+#19 [stage-1 6/9] COPY --from=build /app/publish/ ./
+#19 DONE 0.0s
+
+#20 [stage-1 7/9] COPY config/ /app/config/
+#20 DONE 0.0s
+
+#21 [stage-1 8/9] COPY entrypoint.sh /entrypoint.sh
+#21 DONE 0.0s
+
+#22 [stage-1 9/9] RUN sed -i 's/\r$//' /entrypoint.sh &&     chmod 755 /entrypoint.sh &&     chown worker:worker /entrypoint.sh &&     chown -R 1000:1000 /app
+#22 DONE 0.1s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 0.3s done
+#23 exporting manifest sha256:051d4da1ae6e10d1d29d900d16b6a540dd5ee8bbe9806a435911f63292aff1d1
+#23 exporting manifest sha256:051d4da1ae6e10d1d29d900d16b6a540dd5ee8bbe9806a435911f63292aff1d1 done
+#23 exporting config sha256:ff90e4255438b466ae4f710ab343f5e4b7f3115cc7250c33c68ab769e8987577 done
+#23 exporting attestation manifest sha256:060367bb6400144fbba80cda9036c27fe361dd6a10240cff13ec80c20219e079 done
+#23 exporting manifest list sha256:7b81f2214d857e33dcc5805436dbb9e63fffc29b2cf7fd942c4ebb8a4d325f64 done
+#23 naming to docker.io/library/influxdb_3_measurement-lab-docker-workload:latest done
+#23 unpacking to docker.io/library/influxdb_3_measurement-lab-docker-workload:latest 0.1s done
+#23 DONE 0.4s
+
+#24 resolving provenance for metadata file
+#24 DONE 0.0s
+ influxdb_3_measurement-lab-docker-workload  Built

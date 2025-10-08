@@ -1,0 +1,56 @@
+[entrypoint.sh] Starting Workload container at Tue Oct  7 20:01:04 UTC 2025
+-rw-r--r-- 1 worker worker 53760 Oct  7 20:00 /app/Workload.dll
+[entrypoint.sh] Valid DURATION_SEC: 0
+[entrypoint.sh] Valid BATCH_SIZE: 2000
+[entrypoint.sh] Valid INFLUX_PORT: 8086
+[entrypoint.sh] Valid POINTS: 10000000
+[entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 0
+[entrypoint.sh] Valid PARALLEL_CLIENTS: 16
+[entrypoint.sh] Valid SERIES_MULTIPLIER: 50
+[entrypoint.sh] ENV VARS:
+TAGS=site=lab,host=testnode
+POINTS=10000000
+INFLUXDB_ORG=my-org
+INFLUXDB_ADMIN_PASSWORD=changeme
+INFLUXDB_BUCKET=my-bucket
+INFLUXDB_HTTP_BIND_ADDRESS=:8086
+SCENARIO=large_simul_same_ts
+INFLUX_BUCKET=my-bucket
+MEASUREMENTS=cpu_temp,pressure,humidity
+TIMESTAMP_SPAN_SEC=0
+REPORT_NAME=run
+INFLUX_PORT=8086
+INFLUX_BASE_IMAGE=influxdb:3-core
+WORKLOAD_LOG_DIR=/logs/workload
+SCENARIO_MATRIX_PATH=/app/config/scenario_matrix.yaml
+INFLUX_ORG=my-org
+INFLUXDB_ADMIN_USER=admin
+INFLUXDB_RETENTION=0
+INFLUX_TOKEN={"token":"apiv3_testtoken123","name":"_admin"}
+PARALLEL_CLIENTS=16
+INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
+SERIES_MULTIPLIER=50
+BATCH_SIZE=2000
+POINTS_PER_REQUEST=1000
+DURATION_SEC=0
+INFLUX_HOST=influxdb
+[entrypoint.sh] Waiting for InfluxDB at http://influxdb:8086/health (up to 60 s)
+[entrypoint.sh] InfluxDB health responded: 200
+[entrypoint.sh] Loaded INFLUX_TOKEN from /run/influx_token
+[entrypoint.sh] Waiting for TCP influxdb:8086 (up to 60 s)
+[entrypoint.sh] TCP influxdb:8086 is reachable
+[entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
+[entrypoint.sh] Listing /logs/workload before workload execution:
+total 9952
+-rw-r--r-- 1 worker worker 3825695 Oct  7 06:14 batches_20251007T060845Z.csv
+-rw-r--r-- 1 worker worker  758851 Oct  7 08:54 batches_20251007T085346Z.csv
+-rw-r--r-- 1 worker worker 5274032 Oct  7 09:12 batches_20251007T090904Z.csv
+-rw-r--r-- 1 worker worker     255 Oct  7 12:10 batches_20251007T120623Z.csv
+-rw-r--r-- 1 worker worker     111 Oct  7 12:13 batches_20251007T121221Z.csv
+-rw-r--r-- 1 worker worker     831 Oct  7 12:32 batches_20251007T121653Z.csv
+-rw-r--r-- 1 worker worker     914 Oct  7 12:32 batches_20251007T121654Z.csv
+-rw-r--r-- 1 worker worker    1071 Oct  7 19:38 batches_20251007T123319Z.csv
+-rw-r--r-- 1 worker worker    1584 Oct  7 20:01 entrypoint_debug.log
+-rw-r--r-- 1 worker worker  200626 Oct  7 12:33 environment_variables.log
+-rw-r--r-- 1 worker worker    1074 Oct  7 12:33 run.csv
+-rw-r--r-- 1 worker worker   30903 Oct  7 19:38 workload_stdout.log

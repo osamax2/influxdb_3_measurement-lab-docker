@@ -1,15 +1,15 @@
-[entrypoint.sh] Starting Workload container at Tue Oct  7 09:09:03 UTC 2025
--rw-r--r-- 1 worker worker 48128 Oct  7 09:09 /app/Workload.dll
+[entrypoint.sh] Starting Workload container at Wed Oct  8 13:35:51 UTC 2025
+-rw-r--r-- 1 worker worker 55296 Oct  8 08:48 /app/Workload.dll
 [entrypoint.sh] Valid DURATION_SEC: 0
 [entrypoint.sh] Valid BATCH_SIZE: 2000
 [entrypoint.sh] Valid INFLUX_PORT: 8086
-[entrypoint.sh] Valid POINTS: 200000
+[entrypoint.sh] Valid POINTS: 2000000
 [entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 0
 [entrypoint.sh] Valid PARALLEL_CLIENTS: 4
 [entrypoint.sh] Valid SERIES_MULTIPLIER: 50
 [entrypoint.sh] ENV VARS:
 TAGS=site=lab,host=testnode
-POINTS=200000
+POINTS=2000000
 INFLUXDB_ORG=my-org
 INFLUXDB_ADMIN_PASSWORD=changeme
 INFLUXDB_BUCKET=my-bucket
@@ -31,7 +31,6 @@ PARALLEL_CLIENTS=4
 INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
 SERIES_MULTIPLIER=50
 BATCH_SIZE=2000
-POINTS_PER_REQUEST=64
 DURATION_SEC=0
 INFLUX_HOST=influxdb
 [entrypoint.sh] Waiting for InfluxDB at http://influxdb:8086/health (up to 60 s)
@@ -41,10 +40,8 @@ INFLUX_HOST=influxdb
 [entrypoint.sh] TCP influxdb:8086 is reachable
 [entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
 [entrypoint.sh] Listing /logs/workload before workload execution:
-total 5176
--rw-r--r-- 1 worker worker 3825695 Oct  7 06:14 batches_20251007T060845Z.csv
--rw-r--r-- 1 worker worker  758851 Oct  7 08:54 batches_20251007T085346Z.csv
--rw-r--r-- 1 worker worker    1576 Oct  7 09:09 entrypoint_debug.log
--rw-r--r-- 1 worker worker  195453 Oct  7 08:53 environment_variables.log
--rw-r--r-- 1 worker worker     389 Oct  7 08:53 run.csv
--rw-r--r-- 1 worker worker    2587 Oct  7 08:53 workload_stdout.log
+total 204
+-rw-r--r-- 1 worker worker   1556 Oct  8 13:35 entrypoint_debug.log
+-rw-r--r-- 1 worker worker 196546 Oct  8 12:10 environment_variables.log
+-rw-r--r-- 1 worker worker    664 Oct  8 12:10 run.csv
+-rw-r--r-- 1 worker worker   3388 Oct  8 12:10 workload_stdout.log

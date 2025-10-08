@@ -1,0 +1,71 @@
+time="2025-10-08T11:47:36+03:00" level=warning msg="/Users/osamaalabaji/influxdb_3_measurement-lab-docker/docker-compose.tuned.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+workload  | [entrypoint.sh] Starting Workload container at Wed Oct  8 08:41:25 UTC 2025
+workload  | -rw-r--r-- 1 worker worker 55296 Oct  8 08:41 /app/Workload.dll
+workload  | [entrypoint.sh] Valid DURATION_SEC: 0
+workload  | [entrypoint.sh] Valid BATCH_SIZE: 1000
+workload  | [entrypoint.sh] Valid INFLUX_PORT: 8086
+workload  | [entrypoint.sh] Valid POINTS: 200000
+workload  | [entrypoint.sh] Valid TIMESTAMP_SPAN_SEC: 0
+workload  | [entrypoint.sh] Valid PARALLEL_CLIENTS: 4
+workload  | [entrypoint.sh] Valid SERIES_MULTIPLIER: 50
+workload  | [entrypoint.sh] ENV VARS:
+workload  | TAGS=site=lab,host=testnode
+workload  | POINTS=200000
+workload  | INFLUXDB_ORG=my-org
+workload  | INFLUXDB_ADMIN_PASSWORD=changeme
+workload  | INFLUXDB_BUCKET=my-bucket
+workload  | INFLUXDB_HTTP_BIND_ADDRESS=:8086
+workload  | SCENARIO=large_simul_same_ts
+workload  | INFLUX_BUCKET=my-bucket
+workload  | MEASUREMENTS=cpu_temp,pressure,humidity
+workload  | TIMESTAMP_SPAN_SEC=0
+workload  | REPORT_NAME=run
+workload  | INFLUX_PORT=8086
+workload  | INFLUX_BASE_IMAGE=influxdb:3-core
+workload  | WORKLOAD_LOG_DIR=/logs/workload
+workload  | SCENARIO_MATRIX_PATH=/app/config/scenario_matrix.yaml
+workload  | INFLUX_ORG=my-org
+workload  | INFLUXDB_ADMIN_USER=admin
+workload  | INFLUXDB_RETENTION=0
+workload  | INFLUX_TOKEN={"token":"apiv3_testtoken123","name":"_admin"}
+workload  | PARALLEL_CLIENTS=4
+workload  | INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
+workload  | SERIES_MULTIPLIER=50
+workload  | BATCH_SIZE=1000
+workload  | POINTS_PER_REQUEST=250
+workload  | DURATION_SEC=0
+workload  | INFLUX_HOST=influxdb
+workload  | [entrypoint.sh] Waiting for InfluxDB at http://influxdb:8086/health (up to 60 s)
+workload  | [entrypoint.sh] InfluxDB health responded: 200
+workload  | [entrypoint.sh] Loaded INFLUX_TOKEN from /run/influx_token
+workload  | [entrypoint.sh] Waiting for TCP influxdb:8086 (up to 60 s)
+workload  | [entrypoint.sh] TCP influxdb:8086 is reachable
+workload  | [entrypoint.sh] Running: dotnet /app/Workload.dll /entrypoint.sh
+workload  | [entrypoint.sh] Listing /logs/workload before workload execution:
+workload  | total 9980
+workload  | -rw-r--r-- 1 worker worker 3825695 Oct  7 06:14 batches_20251007T060845Z.csv
+workload  | -rw-r--r-- 1 worker worker  758851 Oct  7 08:54 batches_20251007T085346Z.csv
+workload  | -rw-r--r-- 1 worker worker 5274032 Oct  7 09:12 batches_20251007T090904Z.csv
+workload  | -rw-r--r-- 1 worker worker     255 Oct  7 12:10 batches_20251007T120623Z.csv
+workload  | -rw-r--r-- 1 worker worker     111 Oct  7 12:13 batches_20251007T121221Z.csv
+workload  | -rw-r--r-- 1 worker worker     831 Oct  7 12:32 batches_20251007T121653Z.csv
+workload  | -rw-r--r-- 1 worker worker     914 Oct  7 12:32 batches_20251007T121654Z.csv
+workload  | -rw-r--r-- 1 worker worker    1071 Oct  7 19:38 batches_20251007T123319Z.csv
+workload  | -rw-r--r-- 1 worker worker    1422 Oct  7 20:03 batches_20251007T200106Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  7 20:04 batches_20251007T200416Z.csv
+workload  | -rw-r--r-- 1 worker worker     819 Oct  7 20:10 batches_20251007T200851Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  7 20:10 batches_20251007T201034Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  7 20:28 batches_20251007T202842Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  7 20:34 batches_20251007T203407Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  7 20:44 batches_20251007T204409Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 07:07 batches_20251008T070725Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 07:14 batches_20251008T071429Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 07:15 batches_20251008T071511Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 07:38 batches_20251008T073845Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 07:45 batches_20251008T074544Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 08:10 batches_20251008T081008Z.csv
+workload  | -rw-r--r-- 1 worker worker      63 Oct  8 08:16 batches_20251008T081657Z.csv
+workload  | -rw-r--r-- 1 worker worker    1577 Oct  8 08:41 entrypoint_debug.log
+workload  | -rw-r--r-- 1 worker worker  215210 Oct  8 08:16 environment_variables.log
+workload  | -rw-r--r-- 1 worker worker     664 Oct  8 08:16 run.csv
+workload  | -rw-r--r-- 1 worker worker    3318 Oct  8 08:16 workload_stdout.log

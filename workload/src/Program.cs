@@ -276,8 +276,9 @@ public static class Program
     // Read gzip/send concurrency from environment so we can tune without recompiling
     bool useGzipEnv = string.Equals(Env("USE_GZIP", "false"), "true", StringComparison.OrdinalIgnoreCase);
     int sendConcurrency = ParseNumberEnv("SEND_CONCURRENCY", 8);
-    // Points per HTTP request (small integer). Default to 4 as requested.
-    int pointsPerRequest = ParseNumberEnv("POINTS_PER_REQUEST", 4);
+    // Points per HTTP request. Default to 50000 to allow large single-request payloads;
+    // can be overridden with env POINTS_PER_REQUEST for smaller batch sizes during tests.
+    int pointsPerRequest = ParseNumberEnv("POINTS_PER_REQUEST", 50000);
             // Optional: use v3 write_lp endpoint instead of v2 write
             bool useV3WriteLp = string.Equals(Env("USE_V3_WRITE_LP", "false"), "true", StringComparison.OrdinalIgnoreCase);
             string v3Db = Env("V3_DB", "");

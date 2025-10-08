@@ -29,7 +29,8 @@ namespace Workload
         public bool UseGzip { get; init; } = false;
         public int ChunkSizeBytes { get; init; } = 131072;
         public int CapacityMultiplier { get; init; } = 1;
-        public int PointsPerRequest { get; init; } = 4;
+    // Increase default to 50k to allow large single-request payloads when desired
+    public int PointsPerRequest { get; init; } = 50000;
         public bool UseV3WriteLp { get; init; } = false;
         public string? V3Db { get; init; }
         public bool AcceptPartial { get; init; } = true;
@@ -95,6 +96,8 @@ namespace Workload
         {
             _token = token ?? string.Empty;
             _pointsPerRequest = Math.Max(1, pointsPerRequest);
+            // ensure batchSize is at least as large as pointsPerRequest to avoid frequent flushes
+            batchSize = Math.Max(batchSize, _pointsPerRequest);
             _useGzip = useGzip;
 
             var handler = new SocketsHttpHandler
@@ -150,7 +153,9 @@ namespace Workload
             }
             _writeUri = ub.Uri;
 
-            _channel = Channel.CreateBounded<string>(new BoundedChannelOptions(batchSize * Math.Max(1, capacityMultiplier))
+            // Channel capacity: allow at least one full batch per capacity multiplier to avoid blocking producers
+            int channelCapacity = Math.Max(batchSize, _pointsPerRequest) * Math.Max(1, capacityMultiplier);
+            _channel = Channel.CreateBounded<string>(new BoundedChannelOptions(channelCapacity)
             {
                 FullMode = BoundedChannelFullMode.Wait
             });
