@@ -46,6 +46,7 @@ namespace Workload
         private readonly Channel<string> _channel;
         private readonly int _pointsPerRequest;
         private readonly bool _useGzip;
+    private readonly int _chunkSizeBytes;
 
         private readonly Task _consumerTask;
     private CancellationTokenSource? _cts;
@@ -109,8 +110,12 @@ namespace Workload
 
             _http = new HttpClient(handler, disposeHandler: true)
             {
-                Timeout = TimeSpan.FromSeconds(60)
+                // Increase timeout for large uploads; chunking will reduce per-request size but
+                // keep a generous timeout to tolerate server-side processing delays.
+                Timeout = TimeSpan.FromMinutes(5)
             };
+
+            _chunkSizeBytes = Math.Max(16 * 1024, Math.Min(chunkSizeBytes, 32 * 1024 * 1024));
 
             var ub = new UriBuilder("http", host, port);
             if (useV3WriteLp)
@@ -239,36 +244,8 @@ namespace Workload
         {
             var payload = string.Join('\n', lines) + '\n';
 
-            // Prepare payload bytes once (either compressed or raw). We'll recreate HttpContent per attempt
-            byte[] payloadBytes;
-            bool isGzip = false;
-
-            if (_useGzip)
-            {
-                try
-                {
-                    var raw = Encoding.UTF8.GetBytes(payload);
-                    using (var ms = new MemoryStream())
-                    {
-                        using (var gz = new GZipStream(ms, CompressionLevel.Fastest, leaveOpen: false))
-                        {
-                            gz.Write(raw, 0, raw.Length);
-                        }
-                        payloadBytes = ms.ToArray();
-                    }
-                    isGzip = true;
-                }
-                catch (Exception ex)
-                {
-                    try { Console.Error.WriteLine($"Gzip compression failed, sending uncompressed: {ex}"); } catch { }
-                    payloadBytes = Encoding.UTF8.GetBytes(payload);
-                    isGzip = false;
-                }
-            }
-            else
-            {
-                payloadBytes = Encoding.UTF8.GetBytes(payload);
-            }
+            // Prepare payload bytes once (raw UTF-8). We'll chunk and optionally compress each chunk independently.
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
 
             int maxRetries = 3;
             var rand = new Random();
@@ -279,130 +256,179 @@ namespace Workload
             string errorMsg = string.Empty;
             long latencyMs = 0;
 
-            for (int attempt = 0; attempt < maxRetries; attempt++)
+            // Build and send chunks composed of whole LP lines (don't split lines across requests)
+            int idx = 0;
+            int totalLines = lines.Count;
+            while (idx < totalLines)
             {
-                if (ct.IsCancellationRequested)
+                var chunkLines = new List<string>();
+                int chunkBytesEstimate = 0;
+
+                // Accumulate lines until adding the next line would exceed the byte-size chunk limit.
+                while (idx < totalLines)
                 {
-                    attemptsMade = attempt;
-                    break;
-                }
-                // Before attempting network I/O, ensure the host name resolves to an IP.
-                // If DNS fails, wait/backoff and retry so transient DNS hiccups (Docker DNS flaps)
-                // don't immediately produce noisy stack traces.
-                bool resolvable = await EnsureHostResolvableAsync(ct).ConfigureAwait(false);
-                if (!resolvable)
-                {
-                    try { Console.Error.WriteLine($"Host name resolution failed for {_writeUri.Host}, backing off and will retry (attempt={attempt})"); } catch { }
-                    // perform backoff and skip attempting the HTTP request this iteration
-                    int dnsBackoffMs = (int)(100 * Math.Pow(2, attempt));
-                    dnsBackoffMs += new Random().Next(0, 100);
-                    try { await Task.Delay(dnsBackoffMs, ct).ConfigureAwait(false); } catch (OperationCanceledException) { return; }
-                    continue;
+                    string l = lines[idx] + "\n";
+                    int b = Encoding.UTF8.GetByteCount(l);
+                    if (chunkLines.Count > 0 && chunkBytesEstimate + b > _chunkSizeBytes)
+                        break;
+                    chunkLines.Add(lines[idx]);
+                    chunkBytesEstimate += b;
+                    idx++;
                 }
 
-                HttpContent content = new ByteArrayContent(payloadBytes);
-                try
-                {
-                    if (isGzip) content.Headers.ContentEncoding.Add("gzip");
-                    content.Headers.ContentType = new MediaTypeHeaderValue("text/plain") { CharSet = "utf-8" };
+                // Compose chunk payload
+                string chunkPayload = string.Join('\n', chunkLines) + '\n';
+                byte[] chunkRaw = Encoding.UTF8.GetBytes(chunkPayload);
+                byte[] chunkBytes;
+                bool chunkIsGzip = false;
 
-                    // If we have a cached address, construct a request URI using that IP and
-                    // preserve the original Host header so virtual-hosting on the server still works.
-                    Uri targetUri = _writeUri;
-                    if (_cachedAddress != null)
+                if (_useGzip)
+                {
+                    using var ms = new MemoryStream();
+                    using (var gz = new GZipStream(ms, CompressionLevel.Fastest, leaveOpen: false))
                     {
-                        var ub = new UriBuilder(_writeUri)
-                        {
-                            Host = _cachedAddress.ToString()
-                        };
-                        targetUri = ub.Uri;
+                        gz.Write(chunkRaw, 0, chunkRaw.Length);
+                    }
+                    chunkBytes = ms.ToArray();
+                    chunkIsGzip = true;
+                }
+                else
+                {
+                    chunkBytes = chunkRaw;
+                }
+
+                bool chunkSent = false;
+                int chunkAttempts = 0;
+
+                for (int attempt = 0; attempt < maxRetries; attempt++)
+                {
+                    if (ct.IsCancellationRequested)
+                    {
+                        break;
                     }
 
-                    using var req = new HttpRequestMessage(HttpMethod.Post, targetUri) { Content = content };
-                    if (!string.IsNullOrEmpty(_token))
-                        req.Headers.Authorization = new AuthenticationHeaderValue("Token", _token);
-                    // set Host header to original host so server sees expected Host value
-                    if (!string.IsNullOrEmpty(_writeUri.Host)) req.Headers.Host = _writeUri.Host;
+                    bool resolvable = await EnsureHostResolvableAsync(ct).ConfigureAwait(false);
+                    if (!resolvable)
+                    {
+                        try { Console.Error.WriteLine($"Host name resolution failed for {_writeUri.Host}, backing off and will retry (attempt={attempt})"); } catch { }
+                        int dnsBackoffMs = (int)(100 * Math.Pow(2, attempt));
+                        dnsBackoffMs += rand.Next(0, 100);
+                        try { await Task.Delay(dnsBackoffMs, ct).ConfigureAwait(false); } catch (OperationCanceledException) { break; }
+                        continue;
+                    }
 
-                    HttpResponseMessage resp;
+                    HttpContent content = new ByteArrayContent(chunkBytes);
                     try
                     {
-                        var sw = System.Diagnostics.Stopwatch.StartNew();
-                        resp = await _http.SendAsync(req, ct).ConfigureAwait(false);
-                        sw.Stop();
-                        latencyMs = sw.ElapsedMilliseconds;
-                        attemptsMade = attempt + 1;
-                    }
-                    catch (OperationCanceledException) when (ct.IsCancellationRequested)
-                    {
-                        attemptsMade = attempt + 1;
-                        break; // cancelled
-                    }
+                        if (chunkIsGzip) content.Headers.ContentEncoding.Add("gzip");
+                        content.Headers.ContentType = new MediaTypeHeaderValue("text/plain") { CharSet = "utf-8" };
 
-                    if (resp.IsSuccessStatusCode)
+                        Uri targetUri = _writeUri;
+                        if (_cachedAddress != null)
+                        {
+                            var ub = new UriBuilder(_writeUri) { Host = _cachedAddress.ToString() };
+                            targetUri = ub.Uri;
+                        }
+
+                        using var req = new HttpRequestMessage(HttpMethod.Post, targetUri) { Content = content };
+                        if (!string.IsNullOrEmpty(_token))
+                            req.Headers.Authorization = new AuthenticationHeaderValue("Token", _token);
+                        if (!string.IsNullOrEmpty(_writeUri.Host)) req.Headers.Host = _writeUri.Host;
+
+                        HttpResponseMessage resp;
+                        try
+                        {
+                            var sw = System.Diagnostics.Stopwatch.StartNew();
+                            resp = await _http.SendAsync(req, ct).ConfigureAwait(false);
+                            sw.Stop();
+                            latencyMs = sw.ElapsedMilliseconds;
+                            chunkAttempts = attempt + 1;
+                        }
+                        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                        {
+                            chunkAttempts = attempt + 1;
+                            break;
+                        }
+
+                        if (resp.IsSuccessStatusCode)
+                        {
+                            // chunk sent successfully
+                            attemptsMade += chunkAttempts;
+                            chunkSent = true;
+                            break;
+                        }
+
+                        string body = string.Empty;
+                        try { body = await resp.Content.ReadAsStringAsync().ConfigureAwait(false); } catch { }
+
+                        int status = (int)resp.StatusCode;
+                        if (status >= 500 && attempt < maxRetries - 1)
+                        {
+                            try { Console.Error.WriteLine($"Transient server error, will retry chunk: status={status}; points={lines.Count}; attempt={attempt}"); } catch { }
+                        }
+                        else
+                        {
+                            try { Console.Error.WriteLine($"Failed to post chunk: status={status}; points={lines.Count}; url={_writeUri}; body={body}"); } catch { }
+                            httpStatus = status;
+                            errorMsg = body ?? string.Empty;
+
+                            // If the server reports a parsing error (400), dump the chunk payload to a file for inspection.
+                            try
+                            {
+                                if (status == 400)
+                                {
+                                    var logDir = Environment.GetEnvironmentVariable("WORKLOAD_LOG_DIR") ?? "logs/workload";
+                                    Directory.CreateDirectory(logDir);
+                                    var fname = Path.Combine(logDir, $"bad_chunk_{DateTime.UtcNow:yyyyMMddTHHmmssfff}.lp");
+                                    File.WriteAllText(fname, chunkPayload);
+                                }
+                            }
+                            catch { }
+
+                            attemptsMade += chunkAttempts;
+                            chunkSent = false;
+                            break;
+                        }
+                    }
+                    catch (HttpRequestException hre)
                     {
-                        // success
-                        success = true;
-                        httpStatus = (int)resp.StatusCode;
-                        // log after loop
+                        if (attempt < maxRetries - 1)
+                        {
+                            try { Console.Error.WriteLine($"Failed to post chunk exception (network), will retry: {hre.Message}; attempt={attempt}"); } catch { }
+                        }
+                        else
+                        {
+                            try { Console.Error.WriteLine($"Failed to post chunk exception: {hre}"); } catch { }
+                            errorMsg = hre.Message;
+                            attemptsMade += attempt + 1;
+                            break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        try { Console.Error.WriteLine($"Failed to post chunk exception: {ex}"); } catch { }
+                        errorMsg = ex.Message;
+                        attemptsMade += attempt + 1;
                         break;
                     }
 
-                    // not success - read body for diagnostics
-                    string body = string.Empty;
-                    try { body = await resp.Content.ReadAsStringAsync().ConfigureAwait(false); } catch (Exception ex) { body = ex.Message; }
-
-                    int status = (int)resp.StatusCode;
-                    // Retry for server errors (5xx), otherwise log and break
-                    if (status >= 500 && attempt < maxRetries - 1)
-                    {
-                        try { Console.Error.WriteLine($"Transient server error, will retry: status={status}; points={lines.Count}; attempt={attempt}"); } catch { }
-                    }
-                    else
-                    {
-                        try { Console.Error.WriteLine($"Failed to post batch: status={status}; points={lines.Count}; url={_writeUri}; body={body}"); } catch { }
-                        httpStatus = status;
-                        errorMsg = body ?? string.Empty;
-                        attemptsMade = attempt + 1;
-                        break;
-                    }
+                    int backoffMsNext = (int)(100 * Math.Pow(2, attempt));
+                    backoffMsNext += rand.Next(0, 100);
+                    try { await Task.Delay(backoffMsNext, ct).ConfigureAwait(false); } catch (OperationCanceledException) { break; }
                 }
-                catch (HttpRequestException hre)
+
+                if (!chunkSent)
                 {
-                    // Network-level errors - retryable
-                    if (attempt < maxRetries - 1)
-                    {
-                        try { Console.Error.WriteLine($"Failed to post batch exception (network), will retry: {hre.Message}; attempt={attempt}"); } catch { }
-                    }
-                    else
-                    {
-                        try { Console.Error.WriteLine($"Failed to post batch exception: {hre}"); } catch { }
-                        errorMsg = hre.Message;
-                        attemptsMade = attempt + 1;
-                        break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Other errors: log and don't retry
-                    try { Console.Error.WriteLine($"Failed to post batch exception: {ex}"); } catch { }
-                    errorMsg = ex.Message;
-                    attemptsMade = attempt + 1;
+                    // Failed to send this chunk after retries - abort batch
+                    success = false;
                     break;
                 }
-                finally
-                {
-                    // content will be disposed by HttpRequestMessage / using var req scope
-                }
-
-                // backoff before next attempt (exponential with jitter)
-                int backoffMsNext = (int)(100 * Math.Pow(2, attempt)); // 100ms, 200ms, 400ms ...
-                // apply small random jitter up to +100ms
-                backoffMsNext += rand.Next(0, 100);
-                try { await Task.Delay(backoffMsNext, ct).ConfigureAwait(false); } catch (OperationCanceledException) { break; }
             }
 
-            // Write instrumentation line for this batch
+            // If we reached the end, mark success
+            if (idx >= totalLines) success = true;
+
+            // Write instrumentation line for this batch (attempts refer to total chunk attempts)
             try
             {
                 if (_batchLog != null)

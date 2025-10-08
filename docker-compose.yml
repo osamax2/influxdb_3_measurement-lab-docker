@@ -18,8 +18,8 @@ services:
       # Performance Optimizations tuned for ~4GB host
       # Reduce cache and buffer sizes to fit in a constrained host while keeping decent write throughput
       INFLUXDB_SQLITE_CACHE_SIZE: "268435456"   # 256MB sqlite cache
-      INFLUXDB_WAL_BUFFER_SIZE: "100000"         # larger WAL buffer to accumulate more ops per flush
-      INFLUXDB_WAL_FLUSH_INTERVAL: "60s"        # longer flush interval so WAL accumulates more ops per flush
+      INFLUXDB_WAL_BUFFER_SIZE: "1000000"         # larger WAL buffer to accumulate more ops per flush
+      INFLUXDB_WAL_FLUSH_INTERVAL: "6s"        # longer flush interval so WAL accumulates more ops per flush
       INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "33554432" # 32MB max request size (>= chunk size)
       INFLUXDB_QUERY_MEMORY_BYTES: "268435456"  # 256MB query memory
       INFLUXDB_MAX_CONCURRENT_QUERIES: "4"      # fewer concurrent queries during heavy write load

@@ -1,15 +1,15 @@
-[13:35:54 INF] START 2025-10-08T13:35:54.2249367Z
+[14:28:49 INF] START 2025-10-08T14:28:49.4768900Z
 [ENV] APP_UID=1654
 [ENV] ASPNETCORE_HTTP_PORTS=8080
-[ENV] BATCH_SIZE=2000
-[ENV] CHUNK_SIZE_BYTES=131072
+[ENV] BATCH_SIZE=50000
+[ENV] CHUNK_SIZE_BYTES=1310720
 [ENV] DOTNET_RUNNING_IN_CONTAINER=true
 [ENV] DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 [ENV] DOTNET_VERSION=8.0.20
 [ENV] DURATION_SEC=0
 [ENV] FLUSH_INTERVAL_MS=1500
 [ENV] HOME=/home/worker
-[ENV] HOSTNAME=186212f31fcb
+[ENV] HOSTNAME=2d765b7adc56
 [ENV] INFLUXDB_3_ADMIN_TOKEN=apiv3_testtoken123
 [ENV] INFLUXDB_ADMIN_PASSWORD=changeme
 [ENV] INFLUXDB_ADMIN_USER=admin
@@ -26,7 +26,7 @@
 [ENV] MEASUREMENTS=cpu_temp,pressure,humidity
 [ENV] PARALLEL_CLIENTS=4
 [ENV] PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-[ENV] POINTS=2000000
+[ENV] POINTS=4000000
 [ENV] PWD=/app
 [ENV] REPORT_NAME=run
 [ENV] SCENARIO=large_simul_same_ts
@@ -43,38 +43,22 @@
 [RunLogger] Writing header
 [RunLogger] Header written and flushed
 [RunLogger] Log file stream opened: System.IO.FileStream
-[RunLogger] Event: 2025-10-08T13:35:54.4848387+00:00,SCENARIO_START,large_simul_same_ts
+[RunLogger] Event: 2025-10-08T14:28:49.7892760+00:00,SCENARIO_START,large_simul_same_ts
 [RunLogger] Flushed event: SCENARIO_START
-[RunLogger] Event: 2025-10-08T13:35:54.4851902+00:00,PARAMS,points=2000000;ts_span=0;pc=4;series_mult=50
+[RunLogger] Event: 2025-10-08T14:28:49.7896926+00:00,PARAMS,points=4000000;ts_span=0;pc=4;series_mult=50
 [RunLogger] Flushed event: PARAMS
-[CONFIG] Total Points: 2000000
+[CONFIG] Total Points: 4000000
 [CONFIG] Parallel Clients: 4
-[CONFIG] Batch Size: 2000
-[RunLogger] Event: 2025-10-08T13:35:54.4951112+00:00,THREAD_0_START,500000
+[CONFIG] Batch Size: 50000
+[RunLogger] Event: 2025-10-08T14:28:49.7905419+00:00,THREAD_0_START,1000000
 [RunLogger] Flushed event: THREAD_0_START
-[THREAD 0] Processing 500000 points
-[RunLogger] Event: 2025-10-08T13:35:54.4952372+00:00,THREAD_1_START,500000
+[THREAD 0] Processing 1000000 points
+[RunLogger] Event: 2025-10-08T14:28:49.7917713+00:00,THREAD_1_START,1000000
 [RunLogger] Flushed event: THREAD_1_START
-[THREAD 1] Processing 500000 points
-[RunLogger] Event: 2025-10-08T13:35:54.4953227+00:00,THREAD_2_START,500000
+[THREAD 1] Processing 1000000 points
+[RunLogger] Event: 2025-10-08T14:28:49.7919932+00:00,THREAD_2_START,1000000
 [RunLogger] Flushed event: THREAD_2_START
-[THREAD 2] Processing 500000 points
-[RunLogger] Event: 2025-10-08T13:35:54.4953982+00:00,THREAD_3_START,500000
+[THREAD 2] Processing 1000000 points
+[RunLogger] Event: 2025-10-08T14:28:49.7921345+00:00,THREAD_3_START,1000000
 [RunLogger] Flushed event: THREAD_3_START
-[THREAD 3] Processing 500000 points
-[RunLogger] Event: 2025-10-08T13:35:56.7645023+00:00,THREAD_3_END,SUCCESS
-[RunLogger] Flushed event: THREAD_3_END
-[THREAD 3] Completed successfully
-[RunLogger] Event: 2025-10-08T13:35:57.4551565+00:00,THREAD_1_END,SUCCESS
-[RunLogger] Flushed event: THREAD_1_END
-[THREAD 1] Completed successfully
-[RunLogger] Event: 2025-10-08T13:35:58.1243980+00:00,THREAD_2_END,SUCCESS
-[RunLogger] Flushed event: THREAD_2_END
-[THREAD 2] Completed successfully
-[RunLogger] Event: 2025-10-08T13:35:58.6760350+00:00,THREAD_0_END,SUCCESS
-[RunLogger] Flushed event: THREAD_0_END
-[THREAD 0] Completed successfully
-[RunLogger] Event: 2025-10-08T13:35:58.6856920+00:00,SCENARIO_END,SUCCESS
-[RunLogger] Flushed event: SCENARIO_END
-[RunLogger] Disposing logger and flushing file
-[13:35:58 INF] END 2025-10-08T13:35:58.6859255Z
+[THREAD 3] Processing 1000000 points
