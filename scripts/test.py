@@ -19,7 +19,7 @@ else:
         socket.gethostbyname("influxdb")
         INFLUX_URL = "http://influxdb:8086/api/v2/write"
     except Exception:
-        INFLUX_URL = "http://127.0.0.1:8086/api/v2/write"
+        INFLUX_URL = "http://141.45.165.136:8086/api/v2/write"
 
 print(f"Using INFLUX_URL={INFLUX_URL}")
 INFLUX_TOKEN = os.environ.get("INFLUX_TOKEN", "apiv3_testtoken123")

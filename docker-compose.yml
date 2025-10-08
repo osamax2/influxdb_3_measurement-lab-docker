@@ -1,12 +1,67 @@
 version: '3.8'
 services:
-  workload:
-    build: ./workload
-    container_name: workload
+  influxdb:
+    build: ./influxdb
+    user: root
+    ports:
+      - "8086:8086"
+      - "8181:8181"
     env_file:
       - .env
     environment:
-      INFLUX_HOST: 141.45.165.136
+      INFLUXDB_3_ADMIN_TOKEN: "${INFLUXDB_3_ADMIN_TOKEN}"
+      INFLUXDB_ORG: "${INFLUX_ORG}"
+      INFLUXDB_BUCKET: "${INFLUX_BUCKET}"
+      INFLUX_DISABLE_AUTH: "1"
+      INFLUX_TOKEN: "${INFLUX_TOKEN}"
+      RUST_LOG: "influxdb3_server=info,influxdb3_wal=debug,influxdb3_write=debug"
+      # Performance Optimizations tuned for ~4GB host
+      # Reduce cache and buffer sizes to fit in a constrained host while keeping decent write throughput
+      INFLUXDB_SQLITE_CACHE_SIZE: "268435456"   # 256MB sqlite cache
+      INFLUXDB_WAL_BUFFER_SIZE: "1000000"         # larger WAL buffer to accumulate more ops per flush
+      INFLUXDB_WAL_FLUSH_INTERVAL: "6s"        # longer flush interval so WAL accumulates more ops per flush
+      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "33554432" # 32MB max request size (>= chunk size)
+      INFLUXDB_QUERY_MEMORY_BYTES: "268435456"  # 256MB query memory
+      INFLUXDB_MAX_CONCURRENT_QUERIES: "4"      # fewer concurrent queries during heavy write load
+      INFLUXDB_WRITE_BUFFER_SIZE: "134217728"   # 128MB write buffer
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+      - ./run:/run
+      # Mount tmpfs for WAL directory (critical for performance)
+      - type: tmpfs
+        target: /var/lib/influxdb/wal
+        tmpfs:
+          # tmpfs for WAL; keep moderate size for 4GB host
+          size: 536870912  # 512MB
+    ulimits:
+      nofile:
+        soft: 131072
+        hard: 262144
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c \"sed -i '\\r$' /usr/local/bin/healthcheck.sh || true; sh /usr/local/bin/healthcheck.sh | grep -q '^[12][0-9][0-9]'\""]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 4G  # Target constrained host; raise if host allows
+          cpus: '2'
+        reservations:
+          memory: 3G
+          cpus: '1'
+    networks:
+      - public
+
+  workload:
+    build: ./workload
+    container_name: workload
+    depends_on:
+      - influxdb
+    env_file:
+      - .env
+    environment:
+      INFLUX_HOST: influxdb
       INFLUX_PORT: 8086
       INFLUX_ORG: ${INFLUX_ORG}
       INFLUX_TOKEN: ${INFLUX_TOKEN}
@@ -23,6 +78,11 @@ services:
       DURATION_SEC: ${DURATION_SEC}
       REPORT_NAME: ${REPORT_NAME}
       WORKLOAD_LOG_DIR: ${WORKLOAD_LOG_DIR:-/logs/workload}
+      USE_V3_WRITE_LP: ${USE_V3_WRITE_LP:-}
+      V3_NO_SYNC: ${V3_NO_SYNC:-}
+      V3_ACCEPT_PARTIAL: ${V3_ACCEPT_PARTIAL:-}
+      POINTS_PER_REQUEST: ${POINTS_PER_REQUEST:-}
+      SEND_CONCURRENCY: ${SEND_CONCURRENCY:-}
       SCENARIO_MATRIX_PATH: /app/config/scenario_matrix.yaml
     volumes:
       - ./logs/workload:/logs/workload

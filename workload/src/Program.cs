@@ -306,8 +306,11 @@ public static class Program
                             FlushIntervalMs = flushInterval,
                             UseGzip = useGzipEnv,
                             ChunkSizeBytes = chunkSize,
-                            CapacityMultiplier = capacityMultiplier,
-                            PointsPerRequest = pointsPerRequest,
+                                CapacityMultiplier = capacityMultiplier,
+                                // Map SEND_CONCURRENCY env to send concurrency so writer can parallelize HTTP requests
+                                SendConcurrency = sendConcurrency,
+                                // Allow POINTS_PER_REQUEST to be configured via env for batching tests
+                                PointsPerRequest = pointsPerRequest,
                             UseV3WriteLp = useV3WriteLp,
                             V3Db = v3Db,
                             AcceptPartial = v3AcceptPartial,
